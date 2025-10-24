@@ -421,6 +421,7 @@ struct HomeScreen: View {
                         Spacer()
                     }
                     .padding(.horizontal, 24)
+                    .padding(.bottom, 20)
                     
                     // CO2 Card
                     VStack(spacing: 20) {
@@ -511,7 +512,6 @@ struct HomeScreen: View {
                             }
                         }
                         .padding(.horizontal, 24)
-                        .padding(.top, 24)
                         .padding(.bottom, 20)
                         
                         // Content Card
@@ -707,6 +707,8 @@ struct CameraView: View {
     @Binding var isPresented: Bool
     @State private var showImagePicker = false
     @State private var capturedImage: UIImage?
+    @State private var showCameraPicker = false
+    @State private var showPermissionAlert = false
     
     var body: some View {
         NavigationView {
@@ -772,8 +774,12 @@ struct CameraView: View {
                         
                         // Capture button
                         Button(action: {
-                            // Simulate photo capture
-                            capturedImage = UIImage(systemName: "photo")
+                            // Check camera availability
+                            if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                                showCameraPicker = true
+                            } else {
+                                showPermissionAlert = true
+                            }
                         }) {
                             Circle()
                                 .stroke(Color.white, lineWidth: 5)
@@ -803,13 +809,26 @@ struct CameraView: View {
             .navigationBarHidden(true)
         }
         .sheet(isPresented: $showImagePicker) {
-            ImagePicker(image: $capturedImage)
+            ImagePicker(image: $capturedImage, sourceType: .photoLibrary)
+        }
+        .sheet(isPresented: $showCameraPicker) {
+            ImagePicker(image: $capturedImage, sourceType: .camera)
         }
         .sheet(item: Binding<CapturedImage?>(
             get: { capturedImage.map(CapturedImage.init) },
             set: { _ in capturedImage = nil }
         )) { image in
             ImageReviewView(image: image.image, isPresented: $isPresented)
+        }
+        .alert("Camera Access Required", isPresented: $showPermissionAlert) {
+            Button("Settings") {
+                if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(settingsUrl)
+                }
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("Please allow camera access in Settings to scan items for carbon footprint tracking.")
         }
     }
 }
@@ -818,11 +837,12 @@ struct CameraView: View {
 struct ImagePicker: UIViewControllerRepresentable {
     @Binding var image: UIImage?
     @Environment(\.presentationMode) var presentationMode
+    let sourceType: UIImagePickerController.SourceType
     
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let picker = UIImagePickerController()
         picker.delegate = context.coordinator
-        picker.sourceType = .photoLibrary
+        picker.sourceType = sourceType
         return picker
     }
     

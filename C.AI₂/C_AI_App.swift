@@ -12,6 +12,16 @@ struct C_AI_App: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onAppear {
+                    // Request permissions on app launch
+                    requestPermissions()
+                }
         }
+    }
+    
+    private func requestPermissions() {
+        // Camera permission will be requested when camera is accessed
+        // Location permission will be requested when location tracking starts
+        // Photo library permission will be requested when gallery is accessed
     }
 }
