@@ -11,6 +11,7 @@ import PhotosUI
 import MapKit
 import CoreLocation
 import Combine
+import UIKit
 
 struct ContentView: View {
     @State private var showOnboarding = true
@@ -369,6 +370,18 @@ struct MainTabView: View {
                     Text("Home")
                 }
             
+            DrivingScreen()
+                .tabItem {
+                    Image(systemName: "car.fill")
+                    Text("Driving")
+                }
+            
+            ScreenTimeScreen()
+                .tabItem {
+                    Image(systemName: "iphone")
+                    Text("Screen Time")
+                }
+            
             SettingsScreen()
                 .tabItem {
                     Image(systemName: "gearshape.fill")
@@ -382,6 +395,470 @@ struct MainTabView: View {
 // MARK: - Home Screen
 struct HomeScreen: View {
     @State private var showCamera = false
+    @State private var showCameraPermissionAlert = false
+    @State private var cameraPermissionStatus: AVAuthorizationStatus = .notDetermined
+    @State private var showCarbonLog = false
+    
+    var body: some View {
+        NavigationView {
+            ZStack {
+                Color.white
+                    .ignoresSafeArea()
+                
+                ScrollView {
+                    VStack(spacing: 0) {
+                        // Header
+                        HStack {
+                            Text("Today")
+                                .font(.system(size: 34, weight: .bold))
+                                .foregroundColor(.black)
+                            
+                            Spacer()
+                        }
+                        .padding(.horizontal, 24)
+                        .padding(.top, 20)
+                        .padding(.bottom, 24)
+                        
+                        // Carbon Footprint Section Header
+                        HStack {
+                            Text("Carbon Footprint")
+                                .font(.system(size: 20, weight: .bold))
+                                .foregroundColor(.black)
+                            
+                            Spacer()
+                        }
+                        .padding(.horizontal, 24)
+                        .padding(.bottom, 20)
+                        
+                        // CO2 Card
+                        Button(action: {
+                            showCarbonLog = true
+                        }) {
+                            VStack(spacing: 20) {
+                                HStack {
+                                    Image(systemName: "leaf.fill")
+                                        .font(.system(size: 28))
+                                        .foregroundColor(.green)
+                                    
+                                    Spacer()
+                                    
+                                    Text("Oct 24")
+                                        .font(.system(size: 15, weight: .medium))
+                                        .foregroundColor(.gray)
+                                }
+                                
+                                HStack {
+                                    VStack(alignment: .leading, spacing: 8) {
+                                        Text("Carbon Footprint")
+                                            .font(.system(size: 17, weight: .regular))
+                                            .foregroundColor(.gray)
+                                        
+                                        HStack(alignment: .firstTextBaseline, spacing: 6) {
+                                            Text("2.4")
+                                                .font(.system(size: 64, weight: .bold))
+                                                .foregroundColor(.white)
+                                            
+                                            Text("kg CO₂e")
+                                                .font(.system(size: 20, weight: .semibold))
+                                                .foregroundColor(.gray)
+                                        }
+                                    }
+                                    
+                                    Spacer()
+                                    
+                                    Image(systemName: "chevron.right")
+                                        .font(.system(size: 16, weight: .semibold))
+                                        .foregroundColor(.gray)
+                                }
+                            }
+                            .padding(24)
+                            .background(Color.black)
+                            .cornerRadius(24)
+                        }
+                        .padding(.horizontal, 24)
+                        
+                        Spacer()
+                            .frame(height: 20)
+                        
+                        // Square Widgets Row
+                        HStack(spacing: 12) {
+                            // Daily Average Widget
+                            VStack(spacing: 12) {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Daily Average")
+                                        .font(.system(size: 14, weight: .regular))
+                                        .foregroundColor(.gray)
+                                    
+                                    Text("1.8")
+                                        .font(.system(size: 28, weight: .bold))
+                                        .foregroundColor(.green)
+                                    
+                                    Text("kg CO₂e")
+                                        .font(.system(size: 12, weight: .medium))
+                                        .foregroundColor(.gray)
+                                }
+                                
+                                Spacer()
+                            }
+                            .padding(20)
+                            .background(Color.white)
+                            .cornerRadius(20)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(Color.black, lineWidth: 2)
+                            )
+                            
+                            // Monthly Goal Widget
+                            VStack(spacing: 12) {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Monthly Goal")
+                                        .font(.system(size: 14, weight: .regular))
+                                        .foregroundColor(.gray)
+                                    
+                                    Text("75%")
+                                        .font(.system(size: 28, weight: .bold))
+                                        .foregroundColor(.green)
+                                    
+                                    Text("of 50kg")
+                                        .font(.system(size: 12, weight: .medium))
+                                        .foregroundColor(.gray)
+                                }
+                                
+                                Spacer()
+                            }
+                            .padding(20)
+                            .background(Color.white)
+                            .cornerRadius(20)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(Color.black, lineWidth: 2)
+                            )
+                        }
+                        .padding(.horizontal, 24)
+                        
+                        Spacer()
+                            .frame(height: 32)
+                        
+                        // Camera Button
+                        Button(action: {
+                            checkCameraPermissionAndOpen()
+                        }) {
+                            HStack(spacing: 12) {
+                                Image(systemName: "camera.fill")
+                                    .font(.system(size: 22, weight: .semibold))
+                                
+                                Text("Scan Item")
+                                    .font(.system(size: 18, weight: .semibold))
+                            }
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 60)
+                            .background(Color.black)
+                            .cornerRadius(20)
+                        }
+                        .padding(.horizontal, 24)
+                        
+                        Spacer()
+                            .frame(height: 100)
+                    }
+                }
+            }
+            .navigationBarHidden(true)
+        }
+        .sheet(isPresented: $showCamera) {
+            CameraView(isPresented: $showCamera)
+        }
+        .sheet(isPresented: $showCarbonLog) {
+            CarbonFootprintLogView(isPresented: $showCarbonLog)
+        }
+        .alert("Camera Access Required", isPresented: $showCameraPermissionAlert) {
+            Button("Settings") {
+                openAppSettings()
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("C.AI₂ needs camera access to scan items. Please enable camera access in Settings.")
+        }
+        .onAppear {
+            checkCameraPermissionStatus()
+        }
+    }
+    
+    private func checkCameraPermissionStatus() {
+        cameraPermissionStatus = AVCaptureDevice.authorizationStatus(for: .video)
+    }
+    
+    private func checkCameraPermissionAndOpen() {
+        switch cameraPermissionStatus {
+        case .authorized:
+            showCamera = true
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: .video) { granted in
+                DispatchQueue.main.async {
+                    cameraPermissionStatus = granted ? .authorized : .denied
+                    if granted {
+                        showCamera = true
+                    } else {
+                        showCameraPermissionAlert = true
+                    }
+                }
+            }
+        case .denied, .restricted:
+            showCameraPermissionAlert = true
+        @unknown default:
+            showCameraPermissionAlert = true
+        }
+    }
+    
+    private func openAppSettings() {
+        if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
+            UIApplication.shared.open(settingsUrl)
+        }
+    }
+}
+
+// MARK: - Carbon Footprint Log View
+struct CarbonFootprintLogView: View {
+    @Binding var isPresented: Bool
+    @State private var carbonEntries: [CarbonEntry] = []
+    
+    var body: some View {
+        NavigationView {
+            ZStack {
+                Color.white
+                    .ignoresSafeArea()
+                
+                ScrollView {
+                    VStack(spacing: 0) {
+                        // Header Summary
+                        VStack(spacing: 20) {
+                            HStack {
+                                Image(systemName: "leaf.fill")
+                                    .font(.system(size: 28))
+                                    .foregroundColor(.green)
+                                
+                                Spacer()
+                                
+                                Text("Oct 24")
+                                    .font(.system(size: 15, weight: .medium))
+                                    .foregroundColor(.gray)
+                            }
+                            
+                            HStack {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text("Total Carbon Footprint")
+                                        .font(.system(size: 17, weight: .regular))
+                                        .foregroundColor(.gray)
+                                    
+                                    HStack(alignment: .firstTextBaseline, spacing: 6) {
+                                        Text("2.4")
+                                            .font(.system(size: 48, weight: .bold))
+                                            .foregroundColor(.white)
+                                        
+                                        Text("kg CO₂e")
+                                            .font(.system(size: 18, weight: .semibold))
+                                            .foregroundColor(.gray)
+                                    }
+                                }
+                                
+                                Spacer()
+                            }
+                        }
+                        .padding(24)
+                        .background(Color.black)
+                        .cornerRadius(24)
+                        .padding(.horizontal, 24)
+                        .padding(.top, 20)
+                        .padding(.bottom, 24)
+                        
+                        // AI Reduction Suggestions Button
+                        Button(action: {
+                            // AI-powered reduction suggestions
+                        }) {
+                            HStack(spacing: 16) {
+                                ZStack {
+                                    Circle()
+                                        .fill(Color.green.opacity(0.1))
+                                        .frame(width: 44, height: 44)
+                                    
+                                    Image(systemName: "sparkles")
+                                        .font(.system(size: 20, weight: .medium))
+                                        .foregroundColor(.green)
+                                }
+                                
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("AI-Powered Reduction Tips")
+                                        .font(.system(size: 16, weight: .semibold))
+                                        .foregroundColor(.black)
+                                    
+                                    Text("Get intelligent suggestions to reduce your carbon footprint")
+                                        .font(.system(size: 14, weight: .regular))
+                                        .foregroundColor(.gray)
+                                        .multilineTextAlignment(.leading)
+                                }
+                                
+                                Spacer()
+                                
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(.gray)
+                            }
+                            .padding(20)
+                            .background(Color.white)
+                            .cornerRadius(20)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(Color(.systemGray5), lineWidth: 1)
+                            )
+                        }
+                        .padding(.horizontal, 24)
+                        .padding(.bottom, 24)
+                        
+                        // Activity Log
+                        VStack(spacing: 0) {
+                            HStack {
+                                Text("Activity Log")
+                                    .font(.system(size: 20, weight: .bold))
+                                    .foregroundColor(.black)
+                                
+                                Spacer()
+                            }
+                            .padding(.horizontal, 24)
+                            .padding(.bottom, 20)
+                            
+                            LazyVStack(spacing: 12) {
+                                ForEach(carbonEntries) { entry in
+                                    CarbonEntryRow(entry: entry)
+                                }
+                            }
+                            .padding(.horizontal, 24)
+                        }
+                        
+                        Spacer()
+                            .frame(height: 100)
+                    }
+                }
+            }
+            .navigationTitle("Carbon Log")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarItems(
+                leading: Button("Done") {
+                    isPresented = false
+                }
+            )
+        }
+        .onAppear {
+            loadCarbonEntries()
+        }
+    }
+    
+    private func loadCarbonEntries() {
+        // Demo data - beautiful, clean entries
+        carbonEntries = [
+            CarbonEntry(
+                id: UUID(),
+                title: "Beef Steak",
+                subtitle: "Dinner • 8:30 PM",
+                co2Amount: 2.4,
+                icon: "fork.knife",
+                iconColor: .red,
+                timeAgo: "2 hours ago"
+            ),
+            CarbonEntry(
+                id: UUID(),
+                title: "Driving to Work",
+                subtitle: "Commute • 8:15 AM",
+                co2Amount: 1.2,
+                icon: "car.fill",
+                iconColor: .blue,
+                timeAgo: "14 hours ago"
+            ),
+            CarbonEntry(
+                id: UUID(),
+                title: "Coffee",
+                subtitle: "Morning • 7:45 AM",
+                co2Amount: 0.2,
+                icon: "cup.and.saucer.fill",
+                iconColor: .brown,
+                timeAgo: "15 hours ago"
+            ),
+            CarbonEntry(
+                id: UUID(),
+                title: "Screen Time",
+                subtitle: "Digital Usage • All Day",
+                co2Amount: 0.1,
+                icon: "iphone",
+                iconColor: .purple,
+                timeAgo: "Ongoing"
+            )
+        ]
+    }
+}
+
+// MARK: - Carbon Entry Model
+struct CarbonEntry: Identifiable {
+    let id: UUID
+    let title: String
+    let subtitle: String
+    let co2Amount: Double
+    let icon: String
+    let iconColor: Color
+    let timeAgo: String
+}
+
+// MARK: - Carbon Entry Row
+struct CarbonEntryRow: View {
+    let entry: CarbonEntry
+    
+    var body: some View {
+        HStack(spacing: 16) {
+            // Icon
+            ZStack {
+                Circle()
+                    .fill(entry.iconColor.opacity(0.1))
+                    .frame(width: 44, height: 44)
+                
+                Image(systemName: entry.icon)
+                    .font(.system(size: 20, weight: .medium))
+                    .foregroundColor(entry.iconColor)
+            }
+            
+            // Content
+            VStack(alignment: .leading, spacing: 4) {
+                Text(entry.title)
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.black)
+                
+                Text(entry.subtitle)
+                    .font(.system(size: 14, weight: .regular))
+                    .foregroundColor(.gray)
+            }
+            
+            Spacer()
+            
+            // CO2 Amount
+            VStack(alignment: .trailing, spacing: 2) {
+                Text(String(format: "%.1f", entry.co2Amount))
+                    .font(.system(size: 18, weight: .bold))
+                    .foregroundColor(.green)
+                
+                Text("kg CO₂e")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(.gray)
+            }
+        }
+        .padding(20)
+        .background(Color.white)
+        .cornerRadius(16)
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(Color(.systemGray5), lineWidth: 1)
+        )
+    }
+}
+
+// MARK: - Driving Screen
+struct DrivingScreen: View {
     @StateObject private var locationManager = LocationManager()
     @State private var showMap = false
     
@@ -391,108 +868,12 @@ struct HomeScreen: View {
                 Color.white
                     .ignoresSafeArea()
                 
-                VStack(spacing: 0) {
-                    // Header
-                    HStack {
-                        Text("Today")
-                            .font(.system(size: 34, weight: .bold))
-                            .foregroundColor(.black)
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                            // Settings action
-                        }) {
-                            Image(systemName: "gearshape.fill")
-                                .font(.system(size: 20))
-                                .foregroundColor(.gray)
-                        }
-                    }
-                    .padding(.horizontal, 24)
-                    .padding(.top, 20)
-                    .padding(.bottom, 24)
-                    
-                    // Carbon Footprint Section Header
-                    HStack {
-                        Text("Carbon Footprint")
-                            .font(.system(size: 20, weight: .bold))
-                            .foregroundColor(.black)
-                        
-                        Spacer()
-                    }
-                    .padding(.horizontal, 24)
-                    .padding(.bottom, 20)
-                    
-                    // CO2 Card
-                    VStack(spacing: 20) {
-                        HStack {
-                            Image(systemName: "leaf.fill")
-                                .font(.system(size: 28))
-                                .foregroundColor(.green)
-                            
-                            Spacer()
-                            
-                            Text("Oct 24")
-                                .font(.system(size: 15, weight: .medium))
-                                .foregroundColor(.gray)
-                        }
-                        
-                        HStack {
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text("Carbon Footprint")
-                                    .font(.system(size: 17, weight: .regular))
-                                    .foregroundColor(.gray)
-                                
-                                HStack(alignment: .firstTextBaseline, spacing: 6) {
-                                    Text("0.0")
-                                        .font(.system(size: 64, weight: .bold))
-                                        .foregroundColor(.white)
-                                    
-                                    Text("kg CO₂e")
-                                        .font(.system(size: 20, weight: .semibold))
-                                        .foregroundColor(.gray)
-                                }
-                            }
-                            
-                            Spacer()
-                        }
-                    }
-                    .padding(24)
-                    .background(Color.black)
-                    .cornerRadius(24)
-                    .padding(.horizontal, 24)
-                    
-                    Spacer()
-                        .frame(height: 20)
-                    
-                    // Camera Button
-                    Button(action: {
-                        showCamera = true
-                    }) {
-                        HStack(spacing: 12) {
-                            Image(systemName: "camera.fill")
-                                .font(.system(size: 22, weight: .semibold))
-                            
-                            Text("Scan Item")
-                                .font(.system(size: 18, weight: .semibold))
-                        }
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 60)
-                        .background(Color.black)
-                        .cornerRadius(20)
-                    }
-                    .padding(.horizontal, 24)
-                    
-                    Spacer()
-                        .frame(height: 20)
-                    
-                    // Driving Activity Card - Cal.AI Style
+                ScrollView {
                     VStack(spacing: 0) {
                         // Header
                         HStack {
-                            Text("Driving Activity")
-                                .font(.system(size: 20, weight: .bold))
+                            Text("Driving")
+                                .font(.system(size: 34, weight: .bold))
                                 .foregroundColor(.black)
                             
                             Spacer()
@@ -512,119 +893,302 @@ struct HomeScreen: View {
                             }
                         }
                         .padding(.horizontal, 24)
-                        .padding(.bottom, 20)
+                        .padding(.top, 20)
+                        .padding(.bottom, 24)
                         
-                        // Content Card
-                        VStack(spacing: 20) {
-                            if locationManager.isTracking {
-                                // Active tracking state
-                                HStack {
-                                    VStack(alignment: .leading, spacing: 8) {
-                                        HStack(spacing: 8) {
-                                            Circle()
-                                                .fill(Color.green)
-                                                .frame(width: 8, height: 8)
-                                            
-                                            Text("Tracking Route")
-                                                .font(.system(size: 16, weight: .medium))
-                                                .foregroundColor(.black)
-                                        }
-                                        
-                                        HStack(spacing: 24) {
-                                            VStack(alignment: .leading, spacing: 4) {
-                                                Text("Distance")
-                                                    .font(.system(size: 14, weight: .regular))
-                                                    .foregroundColor(.gray)
+                        // Driving Activity Card - Cal.AI Style
+                        VStack(spacing: 0) {
+                            // Content Card
+                            VStack(spacing: 20) {
+                                if locationManager.isTracking {
+                                    // Active tracking state
+                                    HStack {
+                                        VStack(alignment: .leading, spacing: 8) {
+                                            HStack(spacing: 8) {
+                                                Circle()
+                                                    .fill(Color.green)
+                                                    .frame(width: 8, height: 8)
                                                 
-                                                Text(String(format: "%.1f km", locationManager.totalDistance / 1000))
-                                                    .font(.system(size: 28, weight: .bold))
+                                                Text("Tracking Route")
+                                                    .font(.system(size: 16, weight: .medium))
                                                     .foregroundColor(.black)
                                             }
                                             
-                                            VStack(alignment: .leading, spacing: 4) {
-                                                Text("CO₂ Emissions")
-                                                    .font(.system(size: 14, weight: .regular))
-                                                    .foregroundColor(.gray)
+                                            HStack(spacing: 24) {
+                                                VStack(alignment: .leading, spacing: 4) {
+                                                    Text("Distance")
+                                                        .font(.system(size: 14, weight: .regular))
+                                                        .foregroundColor(.gray)
+                                                    
+                                                    Text(String(format: "%.1f km", locationManager.totalDistance / 1000))
+                                                        .font(.system(size: 28, weight: .bold))
+                                                        .foregroundColor(.black)
+                                                }
                                                 
-                                                Text(String(format: "%.1f kg", locationManager.estimatedCO2))
-                                                    .font(.system(size: 28, weight: .bold))
-                                                    .foregroundColor(.green)
+                                                VStack(alignment: .leading, spacing: 4) {
+                                                    Text("CO₂ Emissions")
+                                                        .font(.system(size: 14, weight: .regular))
+                                                        .foregroundColor(.gray)
+                                                    
+                                                    Text(String(format: "%.1f kg", locationManager.estimatedCO2))
+                                                        .font(.system(size: 28, weight: .bold))
+                                                        .foregroundColor(.green)
+                                                }
+                                                
+                                                Spacer()
                                             }
+                                        }
+                                        
+                                        Spacer()
+                                    }
+                                    
+                                    // Stop button
+                                    Button(action: {
+                                        locationManager.stopTracking()
+                                    }) {
+                                        Text("Stop Tracking")
+                                            .font(.system(size: 17, weight: .semibold))
+                                            .foregroundColor(.white)
+                                            .frame(maxWidth: .infinity)
+                                            .frame(height: 56)
+                                            .background(Color.red)
+                                            .cornerRadius(16)
+                                    }
+                                } else {
+                                    // Inactive state
+                                    VStack(spacing: 20) {
+                                        HStack {
+                                            Image(systemName: "car.fill")
+                                                .font(.system(size: 24))
+                                                .foregroundColor(.green)
                                             
                                             Spacer()
+                                            
+                                            Text("0.0 km")
+                                                .font(.system(size: 24, weight: .bold))
+                                                .foregroundColor(.black)
+                                        }
+                                        
+                                        Text("Start driving to track your route and carbon emissions")
+                                            .font(.system(size: 16, weight: .regular))
+                                            .foregroundColor(.gray)
+                                            .multilineTextAlignment(.center)
+                                        
+                                        Button(action: {
+                                            locationManager.startTracking()
+                                        }) {
+                                            Text("Start Tracking")
+                                                .font(.system(size: 17, weight: .semibold))
+                                                .foregroundColor(.white)
+                                                .frame(maxWidth: .infinity)
+                                                .frame(height: 56)
+                                                .background(Color.green)
+                                                .cornerRadius(16)
+                                        }
+                                    }
+                                }
+                            }
+                            .padding(24)
+                            .background(Color.white)
+                            .cornerRadius(20)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(Color(.systemGray5), lineWidth: 1)
+                            )
+                            .padding(.horizontal, 24)
+                            .padding(.bottom, 24)
+                        }
+                        
+                        Spacer()
+                            .frame(height: 100)
+                    }
+                }
+            }
+            .navigationBarHidden(true)
+        }
+        .sheet(isPresented: $showMap) {
+            MapView(locationManager: locationManager, isPresented: $showMap)
+        }
+    }
+}
+
+// MARK: - Screen Time Screen
+struct ScreenTimeScreen: View {
+    @State private var totalScreenTime: Double = 0.0
+    @State private var estimatedCO2: Double = 0.0
+    @State private var topApps: [(String, Double)] = []
+    @State private var isAnalyzing = true
+    
+    var body: some View {
+        NavigationView {
+            ZStack {
+                Color.white
+                    .ignoresSafeArea()
+                
+                ScrollView {
+                    VStack(spacing: 0) {
+                        // Header
+                        HStack {
+                            Text("Screen Time")
+                                .font(.system(size: 34, weight: .bold))
+                                .foregroundColor(.black)
+                            
+                            Spacer()
+                        }
+                        .padding(.horizontal, 24)
+                        .padding(.top, 20)
+                        .padding(.bottom, 24)
+                        
+                        if isAnalyzing {
+                            // Analysis Loading State
+                            VStack(spacing: 24) {
+                                ProgressView()
+                                    .scaleEffect(1.5)
+                                    .tint(.green)
+                                
+                                Text("Analyzing device usage...")
+                                    .font(.system(size: 18, weight: .medium))
+                                    .foregroundColor(.gray)
+                                
+                                Text("Calculating carbon footprint from app usage")
+                                    .font(.system(size: 14, weight: .regular))
+                                    .foregroundColor(.gray)
+                                    .multilineTextAlignment(.center)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 200)
+                        } else {
+                            // Carbon Impact Card
+                            VStack(spacing: 20) {
+                                HStack {
+                                    Image(systemName: "iphone")
+                                        .font(.system(size: 28))
+                                        .foregroundColor(.blue)
+                                    
+                                    Spacer()
+                                    
+                                    Text("Today")
+                                        .font(.system(size: 15, weight: .medium))
+                                        .foregroundColor(.gray)
+                                }
+                                
+                                HStack {
+                                    VStack(alignment: .leading, spacing: 8) {
+                                        Text("Digital Carbon Footprint")
+                                            .font(.system(size: 17, weight: .regular))
+                                            .foregroundColor(.gray)
+                                        
+                                        HStack(alignment: .firstTextBaseline, spacing: 6) {
+                                            Text(String(format: "%.2f", estimatedCO2))
+                                                .font(.system(size: 64, weight: .bold))
+                                                .foregroundColor(.white)
+                                            
+                                            Text("kg CO₂e")
+                                                .font(.system(size: 20, weight: .semibold))
+                                                .foregroundColor(.gray)
                                         }
                                     }
                                     
                                     Spacer()
                                 }
-                                
-                                // Stop button
-                                Button(action: {
-                                    locationManager.stopTracking()
-                                }) {
-                                    Text("Stop Tracking")
-                                        .font(.system(size: 17, weight: .semibold))
-                                        .foregroundColor(.white)
-                                        .frame(maxWidth: .infinity)
-                                        .frame(height: 56)
-                                        .background(Color.red)
-                                        .cornerRadius(16)
+                            }
+                            .padding(24)
+                            .background(Color.black)
+                            .cornerRadius(24)
+                            .padding(.horizontal, 24)
+                            .padding(.bottom, 24)
+                            
+                            // Screen Time Stats
+                            VStack(spacing: 20) {
+                                HStack {
+                                    Text("Usage Breakdown")
+                                        .font(.system(size: 20, weight: .bold))
+                                        .foregroundColor(.black)
+                                    
+                                    Spacer()
                                 }
-                            } else {
-                                // Inactive state
-                                VStack(spacing: 20) {
+                                
+                                VStack(spacing: 16) {
+                                    // Total Screen Time
                                     HStack {
-                                        Image(systemName: "car.fill")
-                                            .font(.system(size: 24))
-                                            .foregroundColor(.green)
+                                        VStack(alignment: .leading, spacing: 4) {
+                                            Text("Total Screen Time")
+                                                .font(.system(size: 16, weight: .medium))
+                                                .foregroundColor(.black)
+                                            
+                                            Text(String(format: "%.1f hours", totalScreenTime))
+                                                .font(.system(size: 24, weight: .bold))
+                                                .foregroundColor(.blue)
+                                        }
                                         
                                         Spacer()
                                         
-                                        Text("0.0 km")
-                                            .font(.system(size: 24, weight: .bold))
-                                            .foregroundColor(.black)
+                                        Image(systemName: "clock.fill")
+                                            .font(.system(size: 24))
+                                            .foregroundColor(.blue)
                                     }
                                     
-                                    Text("Start driving to track your route and carbon emissions")
-                                        .font(.system(size: 16, weight: .regular))
-                                        .foregroundColor(.gray)
-                                        .multilineTextAlignment(.center)
+                                    Divider()
                                     
-                                    Button(action: {
-                                        locationManager.startTracking()
-                                    }) {
-                                        Text("Start Tracking")
-                                            .font(.system(size: 17, weight: .semibold))
-                                            .foregroundColor(.white)
-                                            .frame(maxWidth: .infinity)
-                                            .frame(height: 56)
-                                            .background(Color.green)
-                                            .cornerRadius(16)
+                                    // Top Apps
+                                    VStack(alignment: .leading, spacing: 12) {
+                                        Text("Top Apps")
+                                            .font(.system(size: 16, weight: .medium))
+                                            .foregroundColor(.black)
+                                        
+                                        ForEach(topApps.prefix(3), id: \.0) { app in
+                                            HStack {
+                                                Text(app.0)
+                                                    .font(.system(size: 14, weight: .regular))
+                                                    .foregroundColor(.gray)
+                                                
+                                                Spacer()
+                                                
+                                                Text(String(format: "%.1fh", app.1))
+                                                    .font(.system(size: 14, weight: .medium))
+                                                    .foregroundColor(.black)
+                                            }
+                                        }
                                     }
                                 }
                             }
+                            .padding(24)
+                            .background(Color.white)
+                            .cornerRadius(20)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(Color(.systemGray5), lineWidth: 1)
+                            )
+                            .padding(.horizontal, 24)
                         }
-                        .padding(24)
-                        .background(Color.white)
-                        .cornerRadius(20)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color(.systemGray5), lineWidth: 1)
-                        )
-                        .padding(.horizontal, 24)
-                        .padding(.bottom, 24)
+                        
+                        Spacer()
+                            .frame(height: 100)
                     }
-                    
-                    Spacer()
                 }
             }
             .navigationBarHidden(true)
         }
-        .sheet(isPresented: $showCamera) {
-            CameraView(isPresented: $showCamera)
+        .onAppear {
+            analyzeScreenTime()
         }
-        .sheet(isPresented: $showMap) {
-            MapView(locationManager: locationManager, isPresented: $showMap)
+    }
+    
+    private func analyzeScreenTime() {
+        // Simulate analysis delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            // Mock data - in real implementation, this would use Screen Time APIs
+            totalScreenTime = Double.random(in: 4.0...8.0)
+            estimatedCO2 = totalScreenTime * 0.05 // Rough estimate: 0.05 kg CO2 per hour
+            topApps = [
+                ("Safari", Double.random(in: 1.0...2.0)),
+                ("Messages", Double.random(in: 0.5...1.5)),
+                ("Instagram", Double.random(in: 0.5...1.0)),
+                ("YouTube", Double.random(in: 0.3...0.8)),
+                ("Mail", Double.random(in: 0.2...0.5))
+            ].sorted { $0.1 > $1.1 }
+            
+            isAnalyzing = false
         }
     }
 }
@@ -705,10 +1269,9 @@ struct SettingsRow: View {
 // MARK: - Camera View
 struct CameraView: View {
     @Binding var isPresented: Bool
-    @State private var showImagePicker = false
     @State private var capturedImage: UIImage?
-    @State private var showCameraPicker = false
-    @State private var showPermissionAlert = false
+    @State private var showImagePicker = false
+    @StateObject private var cameraManager = CameraManager()
     
     var body: some View {
         NavigationView {
@@ -716,9 +1279,14 @@ struct CameraView: View {
                 Color.black
                     .ignoresSafeArea()
                 
+                // Live camera preview
+                LiveCameraPreview(cameraManager: cameraManager)
+                    .ignoresSafeArea()
+                
                 VStack {
                     HStack {
                         Button(action: {
+                            cameraManager.stopSession()
                             isPresented = false
                         }) {
                             Image(systemName: "xmark")
@@ -730,17 +1298,6 @@ struct CameraView: View {
                         }
                         
                         Spacer()
-                        
-                        Button(action: {
-                            // Flash toggle
-                        }) {
-                            Image(systemName: "bolt.fill")
-                                .font(.system(size: 20, weight: .semibold))
-                                .foregroundColor(.white)
-                                .frame(width: 44, height: 44)
-                                .background(Color.white.opacity(0.2))
-                                .clipShape(Circle())
-                        }
                     }
                     .padding(.horizontal, 24)
                     .padding(.top, 60)
@@ -751,6 +1308,7 @@ struct CameraView: View {
                     RoundedRectangle(cornerRadius: 24)
                         .strokeBorder(Color.white, lineWidth: 3)
                         .frame(width: 280, height: 280)
+                        .allowsHitTesting(false)
                     
                     Text("Point camera at item")
                         .font(.system(size: 17, weight: .medium))
@@ -774,11 +1332,8 @@ struct CameraView: View {
                         
                         // Capture button
                         Button(action: {
-                            // Check camera availability
-                            if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                                showCameraPicker = true
-                            } else {
-                                showPermissionAlert = true
+                            cameraManager.capturePhoto { image in
+                                capturedImage = image
                             }
                         }) {
                             Circle()
@@ -793,7 +1348,7 @@ struct CameraView: View {
                         
                         // Switch camera button
                         Button(action: {
-                            // Switch camera
+                            cameraManager.switchCamera()
                         }) {
                             Image(systemName: "camera.rotate")
                                 .font(.system(size: 24))
@@ -811,29 +1366,161 @@ struct CameraView: View {
         .sheet(isPresented: $showImagePicker) {
             ImagePicker(image: $capturedImage, sourceType: .photoLibrary)
         }
-        .sheet(isPresented: $showCameraPicker) {
-            ImagePicker(image: $capturedImage, sourceType: .camera)
-        }
         .sheet(item: Binding<CapturedImage?>(
             get: { capturedImage.map(CapturedImage.init) },
             set: { _ in capturedImage = nil }
         )) { image in
             ImageReviewView(image: image.image, isPresented: $isPresented)
         }
-        .alert("Camera Access Required", isPresented: $showPermissionAlert) {
-            Button("Settings") {
-                if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
-                    UIApplication.shared.open(settingsUrl)
-                }
-            }
-            Button("Cancel", role: .cancel) { }
-        } message: {
-            Text("Please allow camera access in Settings to scan items for carbon footprint tracking.")
+        .onDisappear {
+            cameraManager.stopSession()
         }
     }
 }
 
-// MARK: - Image Picker
+// MARK: - Camera Manager
+class CameraManager: NSObject, ObservableObject {
+    private var captureSession: AVCaptureSession?
+    private var capturePhotoOutput: AVCapturePhotoOutput?
+    private var videoPreviewLayer: AVCaptureVideoPreviewLayer?
+    private var captureDevice: AVCaptureDevice?
+    private var currentCameraPosition: AVCaptureDevice.Position = .back
+    
+    var onImageCaptured: ((UIImage) -> Void)?
+    private weak var cameraPreviewLayer: AVCaptureVideoPreviewLayer?
+    
+    override init() {
+        super.init()
+        setupCamera()
+    }
+    
+    func setupCamera() {
+        captureSession = AVCaptureSession()
+        captureSession?.sessionPreset = .photo
+        
+        guard let defaultCaptureDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: currentCameraPosition) else {
+            print("Camera not available")
+            return
+        }
+        
+        captureDevice = defaultCaptureDevice
+        
+        do {
+            let input = try AVCaptureDeviceInput(device: defaultCaptureDevice)
+            
+            if captureSession?.canAddInput(input) ?? false {
+                captureSession?.addInput(input)
+            }
+            
+            capturePhotoOutput = AVCapturePhotoOutput()
+            if let output = capturePhotoOutput, captureSession?.canAddOutput(output) ?? false {
+                captureSession?.addOutput(output)
+            }
+            
+            captureSession?.startRunning()
+        } catch {
+            print("Error setting up camera: \(error)")
+        }
+    }
+    
+    func createPreviewLayer(for view: UIView) {
+        guard let session = captureSession else { return }
+        
+        let previewLayer = AVCaptureVideoPreviewLayer(session: session)
+        previewLayer.videoGravity = .resizeAspectFill
+        previewLayer.frame = view.bounds
+        view.layer.insertSublayer(previewLayer, at: 0)
+        
+        cameraPreviewLayer = previewLayer
+    }
+    
+    func updatePreviewLayerFrame(_ frame: CGRect) {
+        cameraPreviewLayer?.frame = frame
+    }
+    
+    func capturePhoto(completion: @escaping (UIImage) -> Void) {
+        onImageCaptured = completion
+        
+        guard let photoOutput = capturePhotoOutput,
+              let session = captureSession,
+              session.isRunning else {
+            print("Camera not ready")
+            return
+        }
+        
+        let settings: AVCapturePhotoSettings
+        if photoOutput.availablePhotoCodecTypes.contains(.hevc) {
+            settings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc])
+        } else {
+            settings = AVCapturePhotoSettings()
+        }
+        
+        photoOutput.capturePhoto(with: settings, delegate: self)
+    }
+    
+    func switchCamera() {
+        guard let session = captureSession else { return }
+        
+        session.beginConfiguration()
+        
+        // Remove all inputs
+        for input in session.inputs {
+            session.removeInput(input)
+        }
+        
+        // Switch position
+        currentCameraPosition = currentCameraPosition == .back ? .front : .back
+        
+        // Add new input
+        guard let newDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: currentCameraPosition),
+              let newInput = try? AVCaptureDeviceInput(device: newDevice) else {
+            session.commitConfiguration()
+            return
+        }
+        
+        captureDevice = newDevice
+        
+        if session.canAddInput(newInput) {
+            session.addInput(newInput)
+        }
+        
+        session.commitConfiguration()
+    }
+    
+    func stopSession() {
+        captureSession?.stopRunning()
+    }
+}
+
+extension CameraManager: AVCapturePhotoCaptureDelegate {
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        guard let imageData = photo.fileDataRepresentation(),
+              let image = UIImage(data: imageData) else { return }
+        
+        DispatchQueue.main.async {
+            self.onImageCaptured?(image)
+        }
+    }
+}
+
+// MARK: - Live Camera Preview
+struct LiveCameraPreview: UIViewRepresentable {
+    @ObservedObject var cameraManager: CameraManager
+    
+    func makeUIView(context: Context) -> UIView {
+        let view = UIView()
+        view.backgroundColor = .black
+        cameraManager.createPreviewLayer(for: view)
+        return view
+    }
+    
+    func updateUIView(_ uiView: UIView, context: Context) {
+        DispatchQueue.main.async {
+            self.cameraManager.updatePreviewLayerFrame(uiView.bounds)
+        }
+    }
+}
+
 struct ImagePicker: UIViewControllerRepresentable {
     @Binding var image: UIImage?
     @Environment(\.presentationMode) var presentationMode
@@ -1324,3 +2011,4 @@ struct MapPointsOverlay: View {
 #Preview {
     ContentView()
 }
+
