@@ -621,6 +621,7 @@ struct HomeScreen: View {
 struct CarbonFootprintLogView: View {
     @Binding var isPresented: Bool
     @State private var carbonEntries: [CarbonEntry] = []
+    @State private var showAIReductionTips = false
     
     var body: some View {
         NavigationView {
@@ -673,19 +674,9 @@ struct CarbonFootprintLogView: View {
                         
                         // AI Reduction Suggestions Button
                         Button(action: {
-                            // AI-powered reduction suggestions
+                            showAIReductionTips = true
                         }) {
                             HStack(spacing: 16) {
-                                ZStack {
-                                    Circle()
-                                        .fill(Color.green.opacity(0.1))
-                                        .frame(width: 44, height: 44)
-                                    
-                                    Image(systemName: "sparkles")
-                                        .font(.system(size: 20, weight: .medium))
-                                        .foregroundColor(.green)
-                                }
-                                
                                 VStack(alignment: .leading, spacing: 4) {
                                     Text("AI-Powered Reduction Tips")
                                         .font(.system(size: 16, weight: .semibold))
@@ -708,7 +699,14 @@ struct CarbonFootprintLogView: View {
                             .cornerRadius(20)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 20)
-                                    .stroke(Color(.systemGray5), lineWidth: 1)
+                                    .stroke(
+                                        LinearGradient(
+                                            colors: [Color.green.opacity(0.8), Color.green.opacity(0.4)],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        ),
+                                        lineWidth: 2
+                                    )
                             )
                         }
                         .padding(.horizontal, 24)
@@ -746,6 +744,9 @@ struct CarbonFootprintLogView: View {
                     isPresented = false
                 }
             )
+        }
+        .sheet(isPresented: $showAIReductionTips) {
+            AIReductionTipsView(isPresented: $showAIReductionTips)
         }
         .onAppear {
             loadCarbonEntries()
@@ -792,6 +793,351 @@ struct CarbonFootprintLogView: View {
                 timeAgo: "Ongoing"
             )
         ]
+    }
+}
+
+// MARK: - AI Reduction Tips View
+struct AIReductionTipsView: View {
+    @Binding var isPresented: Bool
+    @State private var suggestions: [AIReductionSuggestion] = []
+    @State private var isAnalyzing = true
+    @State private var showSuggestions = false
+    @State private var animateCards = false
+    
+    var body: some View {
+        NavigationView {
+            ZStack {
+                Color.white
+                    .ignoresSafeArea()
+                
+                ScrollView {
+                    VStack(spacing: 0) {
+                        // Header with subtle animation
+                        VStack(spacing: 20) {
+                            HStack {
+                                Text("AI Reduction Tips")
+                                    .font(.system(size: 28, weight: .bold))
+                                    .foregroundColor(.black)
+                                    .opacity(showSuggestions ? 1 : 0)
+                                    .offset(y: showSuggestions ? 0 : -20)
+                                    .animation(.easeOut(duration: 0.6).delay(0.2), value: showSuggestions)
+                                
+                                Spacer()
+                            }
+                            
+                            Text("Intelligent suggestions tailored to your carbon footprint")
+                                .font(.system(size: 16, weight: .regular))
+                                .foregroundColor(.gray)
+                                .multilineTextAlignment(.leading)
+                                .opacity(showSuggestions ? 1 : 0)
+                                .offset(y: showSuggestions ? 0 : -20)
+                                .animation(.easeOut(duration: 0.6).delay(0.4), value: showSuggestions)
+                        }
+                        .padding(.horizontal, 24)
+                        .padding(.top, 20)
+                        .padding(.bottom, 32)
+                        
+                        if isAnalyzing {
+                            // Enhanced Analysis Loading State
+                            VStack(spacing: 32) {
+                                ZStack {
+                                    Circle()
+                                        .stroke(Color.green.opacity(0.1), lineWidth: 3)
+                                        .frame(width: 80, height: 80)
+                                    
+                                    Circle()
+                                        .trim(from: 0, to: 0.7)
+                                        .stroke(
+                                            LinearGradient(
+                                                colors: [Color.green.opacity(0.8), Color.green.opacity(0.4)],
+                                                startPoint: .topLeading,
+                                                endPoint: .bottomTrailing
+                                            ),
+                                            style: StrokeStyle(lineWidth: 3, lineCap: .round)
+                                        )
+                                        .frame(width: 80, height: 80)
+                                        .rotationEffect(.degrees(animateCards ? 360 : 0))
+                                        .animation(.linear(duration: 2).repeatForever(autoreverses: false), value: animateCards)
+                                    
+                                    Image(systemName: "brain.head.profile")
+                                        .font(.system(size: 24, weight: .medium))
+                                        .foregroundColor(.green)
+                                }
+                                
+                                VStack(spacing: 12) {
+                                    Text("Analyzing your carbon footprint...")
+                                        .font(.system(size: 18, weight: .medium))
+                                        .foregroundColor(.black)
+                                    
+                                    Text("Generating personalized reduction strategies")
+                                        .font(.system(size: 14, weight: .regular))
+                                        .foregroundColor(.gray)
+                                        .multilineTextAlignment(.center)
+                                }
+                            }
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 200)
+                        } else {
+                            // AI Suggestions with staggered animations
+                            LazyVStack(spacing: 20) {
+                                ForEach(Array(suggestions.enumerated()), id: \.element.id) { index, suggestion in
+                                    AIReductionSuggestionCard(suggestion: suggestion)
+                                        .opacity(showSuggestions ? 1 : 0)
+                                        .offset(y: showSuggestions ? 0 : 30)
+                                        .animation(
+                                            .easeOut(duration: 0.6)
+                                            .delay(Double(index) * 0.15 + 0.6),
+                                            value: showSuggestions
+                                        )
+                                }
+                            }
+                            .padding(.horizontal, 24)
+                        }
+                        
+                        Spacer()
+                            .frame(height: 100)
+                    }
+                }
+            }
+            .navigationTitle("Reduction Tips")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarItems(
+                leading: Button("Done") {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        isPresented = false
+                    }
+                }
+            )
+        }
+        .onAppear {
+            animateCards = true
+            generateAISuggestions()
+        }
+    }
+    
+    private func generateAISuggestions() {
+        // Simulate AI analysis delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+            suggestions = [
+                AIReductionSuggestion(
+                    id: UUID(),
+                    title: "Optimize Your Commute",
+                    impact: "Save 1.2 kg CO₂e",
+                    description: "Your daily drive contributes 60% of your footprint. Consider the bus + 10-minute walk alternative.",
+                    reasoning: "Same travel time, 70% less emissions. The bus route runs parallel to your driving route.",
+                    difficulty: "Easy",
+                    timeToImplement: "5 minutes",
+                    category: "Transportation",
+                    priority: "High"
+                ),
+                AIReductionSuggestion(
+                    id: UUID(),
+                    title: "Smart Meal Planning",
+                    impact: "Save 0.8 kg CO₂e",
+                    description: "Replace 2 meat meals this week with plant-based alternatives.",
+                    reasoning: "Your beef consumption is 3x the average. Plant proteins have 90% lower carbon intensity.",
+                    difficulty: "Medium",
+                    timeToImplement: "2 hours",
+                    category: "Food",
+                    priority: "High"
+                ),
+                AIReductionSuggestion(
+                    id: UUID(),
+                    title: "Batch Your Errands",
+                    impact: "Save 0.4 kg CO₂e",
+                    description: "Combine grocery shopping with other trips to reduce driving frequency.",
+                    reasoning: "You make 4 separate trips weekly. Batching reduces this to 2 trips, cutting emissions by 50%.",
+                    difficulty: "Easy",
+                    timeToImplement: "10 minutes",
+                    category: "Transportation",
+                    priority: "Medium"
+                ),
+                AIReductionSuggestion(
+                    id: UUID(),
+                    title: "Digital Efficiency",
+                    impact: "Save 0.1 kg CO₂e",
+                    description: "Switch to dark mode and reduce screen brightness during evening hours.",
+                    reasoning: "Your evening screen time uses 40% more energy. Dark mode reduces OLED power consumption by 60%.",
+                    difficulty: "Easy",
+                    timeToImplement: "1 minute",
+                    category: "Digital",
+                    priority: "Low"
+                )
+            ]
+            
+            withAnimation(.easeOut(duration: 0.4)) {
+                isAnalyzing = false
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                withAnimation(.easeOut(duration: 0.6)) {
+                    showSuggestions = true
+                }
+            }
+        }
+    }
+}
+
+// MARK: - AI Reduction Suggestion Model
+struct AIReductionSuggestion: Identifiable {
+    let id: UUID
+    let title: String
+    let impact: String
+    let description: String
+    let reasoning: String
+    let difficulty: String
+    let timeToImplement: String
+    let category: String
+    let priority: String
+}
+
+// MARK: - AI Reduction Suggestion Card
+struct AIReductionSuggestionCard: View {
+    let suggestion: AIReductionSuggestion
+    @State private var isPressed = false
+    
+    var body: some View {
+        VStack(spacing: 20) {
+            // Header with priority indicator
+            HStack {
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack(spacing: 8) {
+                        Text(suggestion.title)
+                            .font(.system(size: 18, weight: .bold))
+                            .foregroundColor(.black)
+                        
+                        // Priority indicator
+                        Circle()
+                            .fill(priorityColor)
+                            .frame(width: 8, height: 8)
+                    }
+                    
+                    Text(suggestion.impact)
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(.green)
+                }
+                
+                Spacer()
+                
+                // Category Badge with enhanced design
+                Text(suggestion.category)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(
+                        LinearGradient(
+                            colors: [Color.green.opacity(0.8), Color.green.opacity(0.6)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .cornerRadius(12)
+            }
+            
+            // Description with better typography
+            Text(suggestion.description)
+                .font(.system(size: 15, weight: .regular))
+                .foregroundColor(.black)
+                .multilineTextAlignment(.leading)
+                .lineSpacing(2)
+            
+            // Enhanced Reasoning section
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(spacing: 6) {
+                    Image(systemName: "lightbulb.fill")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundColor(.green)
+                    
+                    Text("Why this works")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(.black)
+                }
+                
+                Text(suggestion.reasoning)
+                    .font(.system(size: 14, weight: .regular))
+                    .foregroundColor(.gray)
+                    .multilineTextAlignment(.leading)
+                    .lineSpacing(2)
+            }
+            .padding(16)
+            .background(Color(.systemGray6).opacity(0.5))
+            .cornerRadius(12)
+            
+            // Implementation Details with enhanced layout
+            HStack(spacing: 20) {
+                HStack(spacing: 8) {
+                    Image(systemName: "gauge.badge.plus")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundColor(difficultyColor)
+                    
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Difficulty")
+                            .font(.system(size: 11, weight: .medium))
+                            .foregroundColor(.gray)
+                        
+                        Text(suggestion.difficulty)
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundColor(difficultyColor)
+                    }
+                }
+                
+                Spacer()
+                
+                HStack(spacing: 8) {
+                    Image(systemName: "clock.fill")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundColor(.blue)
+                    
+                    VStack(alignment: .trailing, spacing: 2) {
+                        Text("Time")
+                            .font(.system(size: 11, weight: .medium))
+                            .foregroundColor(.gray)
+                        
+                        Text(suggestion.timeToImplement)
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundColor(.black)
+                    }
+                }
+            }
+        }
+        .padding(24)
+        .background(Color.white)
+        .cornerRadius(20)
+        .overlay(
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(Color(.systemGray5), lineWidth: 1)
+        )
+        .scaleEffect(isPressed ? 0.98 : 1.0)
+        .animation(.easeInOut(duration: 0.1), value: isPressed)
+        .onTapGesture {
+            withAnimation(.easeInOut(duration: 0.1)) {
+                isPressed = true
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                withAnimation(.easeInOut(duration: 0.1)) {
+                    isPressed = false
+                }
+            }
+        }
+    }
+    
+    private var difficultyColor: Color {
+        switch suggestion.difficulty {
+        case "Easy": return .green
+        case "Medium": return .orange
+        case "Hard": return .red
+        default: return .gray
+        }
+    }
+    
+    private var priorityColor: Color {
+        switch suggestion.priority {
+        case "High": return .red
+        case "Medium": return .orange
+        case "Low": return .green
+        default: return .gray
+        }
     }
 }
 
