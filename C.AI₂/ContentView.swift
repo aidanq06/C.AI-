@@ -413,6 +413,15 @@ struct HomeScreen: View {
                                 .foregroundColor(.black)
                             
                             Spacer()
+                            
+                            // Help Button
+                            Button(action: {
+                                // Help action
+                            }) {
+                                Image(systemName: "questionmark.circle")
+                                    .font(.system(size: 20, weight: .regular))
+                                    .foregroundColor(.gray)
+                            }
                         }
                         .padding(.horizontal, 24)
                         .padding(.top, 20)
@@ -474,63 +483,46 @@ struct HomeScreen: View {
                                         
                                         Spacer()
                                         
-                                        Text("vs Max")
-                                            .font(.system(size: 12, weight: .regular))
+                                        Text("2.4 / 5.0 kg")
+                                            .font(.system(size: 12, weight: .medium))
                                             .foregroundColor(.gray)
                                     }
                                     
-                                    // CO2 Usage vs Max Visualization
-                                    HStack(spacing: 16) {
-                                        // Usage Bar
-                                        VStack(spacing: 6) {
-                                            HStack(alignment: .bottom, spacing: 12) {
-                                                // Used
-                                                VStack(spacing: 4) {
-                                                    RoundedRectangle(cornerRadius: 6)
-                                                        .fill(Color.green)
-                                                        .frame(width: 32, height: 48)
-                                                    
-                                                    Text("2.4")
-                                                        .font(.system(size: 12, weight: .bold))
-                                                        .foregroundColor(.green)
-                                                    
-                                                    Text("Used")
-                                                        .font(.system(size: 10, weight: .medium))
-                                                        .foregroundColor(.green)
-                                                }
+                                    // Horizontal Progress Bar
+                                    VStack(spacing: 8) {
+                                        // Progress Bar Background
+                                        GeometryReader { geometry in
+                                            let dailyUsage: Double = 2.4
+                                            let dailyMax: Double = 5.0
+                                            let usagePercentage = min(dailyUsage / dailyMax, 1.0)
+                                            let isOverLimit = dailyUsage > dailyMax
+                                            
+                                            ZStack(alignment: .leading) {
+                                                // Background
+                                                RoundedRectangle(cornerRadius: 8)
+                                                    .fill(Color.gray.opacity(0.1))
+                                                    .frame(height: 12)
                                                 
-                                                // Max Allowed
-                                                VStack(spacing: 4) {
-                                                    RoundedRectangle(cornerRadius: 6)
-                                                        .fill(Color.gray.opacity(0.2))
-                                                        .frame(width: 32, height: 60)
-                                                    
-                                                    Text("3.0")
-                                                        .font(.system(size: 12, weight: .medium))
-                                                        .foregroundColor(.gray)
-                                                    
-                                                    Text("Max")
-                                                        .font(.system(size: 10, weight: .medium))
-                                                        .foregroundColor(.gray)
-                                                }
+                                                // Progress Fill
+                                                RoundedRectangle(cornerRadius: 8)
+                                                    .fill(isOverLimit ? Color.red : Color.green)
+                                                    .frame(width: geometry.size.width * usagePercentage, height: 12)
+                                                    .animation(.easeInOut(duration: 0.8), value: dailyUsage)
                                             }
                                         }
+                                        .frame(height: 12)
                                         
-                                        Spacer()
-                                        
-                                        // Status Indicator
-                                        VStack(spacing: 4) {
-                                            Circle()
-                                                .fill(Color.green)
-                                                .frame(width: 12, height: 12)
+                                        // Status Text
+                                        HStack {
+                                            Text("48% of daily limit")
+                                                .font(.system(size: 11, weight: .medium))
+                                                .foregroundColor(.gray)
+                                            
+                                            Spacer()
                                             
                                             Text("Good")
-                                                .font(.system(size: 12, weight: .bold))
+                                                .font(.system(size: 11, weight: .semibold))
                                                 .foregroundColor(.green)
-                                            
-                                            Text("80%")
-                                                .font(.system(size: 10, weight: .regular))
-                                                .foregroundColor(.gray)
                                         }
                                     }
                                 }
@@ -626,7 +618,7 @@ struct HomeScreen: View {
                             }
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
-                            .frame(height: 60)
+                            .frame(height: 80)
                             .background(Color.black)
                             .cornerRadius(20)
                         }
