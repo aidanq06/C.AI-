@@ -405,11 +405,10 @@ struct HomeScreen: View {
                 Color.white
                     .ignoresSafeArea()
                 
-                ScrollView {
-                    VStack(spacing: 0) {
+                VStack(spacing: 0) {
                         // Header
                         HStack {
-                            Text("Today")
+                            Text("C.AI₂")
                                 .font(.system(size: 34, weight: .bold))
                                 .foregroundColor(.black)
                             
@@ -419,61 +418,130 @@ struct HomeScreen: View {
                         .padding(.top, 20)
                         .padding(.bottom, 24)
                         
-                        // Carbon Footprint Section Header
-                        HStack {
-                            Text("Carbon Footprint")
-                                .font(.system(size: 20, weight: .bold))
-                                .foregroundColor(.black)
-                            
-                            Spacer()
-                        }
-                        .padding(.horizontal, 24)
-                        .padding(.bottom, 20)
                         
-                        // CO2 Card
+                        // CO2 Card with White Extension
                         Button(action: {
                             showCarbonLog = true
                         }) {
-                            VStack(spacing: 20) {
-                                HStack {
-                                    Image(systemName: "leaf.fill")
-                                        .font(.system(size: 28))
-                                        .foregroundColor(.green)
-                                    
-                                    Spacer()
-                                    
-                                    Text("Oct 24")
-                                        .font(.system(size: 15, weight: .medium))
-                                        .foregroundColor(.gray)
-                                }
-                                
-                                HStack {
-                                    VStack(alignment: .leading, spacing: 8) {
-                                        Text("Carbon Footprint")
-                                            .font(.system(size: 17, weight: .regular))
-                                            .foregroundColor(.gray)
+                            VStack(spacing: 0) {
+                                // Black Section
+                                VStack(spacing: 20) {
+                                    HStack {
+                                        Image(systemName: "leaf.fill")
+                                            .font(.system(size: 28))
+                                            .foregroundColor(.green)
                                         
-                                        HStack(alignment: .firstTextBaseline, spacing: 6) {
-                                            Text("2.4")
-                                                .font(.system(size: 64, weight: .bold))
-                                                .foregroundColor(.white)
+                                        Spacer()
+                                        
+                                        Text("Oct 24")
+                                            .font(.system(size: 15, weight: .medium))
+                                            .foregroundColor(.gray)
+                                    }
+                                    
+                                    HStack {
+                                        VStack(alignment: .leading, spacing: 8) {
+                                            Text("Carbon Footprint")
+                                                .font(.system(size: 17, weight: .regular))
+                                                .foregroundColor(.gray)
                                             
-                                            Text("kg CO₂e")
-                                                .font(.system(size: 20, weight: .semibold))
+                                            HStack(alignment: .firstTextBaseline, spacing: 6) {
+                                                Text("2.4")
+                                                    .font(.system(size: 64, weight: .bold))
+                                                    .foregroundColor(.white)
+                                                
+                                                Text("kg CO₂e")
+                                                    .font(.system(size: 20, weight: .semibold))
+                                                    .foregroundColor(.gray)
+                                            }
+                                        }
+                                        
+                                        Spacer()
+                                        
+                                        Image(systemName: "chevron.right")
+                                            .font(.system(size: 16, weight: .semibold))
+                                            .foregroundColor(.gray)
+                                    }
+                                }
+                                .padding(24)
+                                .background(Color.black)
+                                
+                                // White Section with CO2 Visualization
+                                VStack(spacing: 12) {
+                                    HStack {
+                                        Text("Daily Usage")
+                                            .font(.system(size: 14, weight: .semibold))
+                                            .foregroundColor(.black)
+                                        
+                                        Spacer()
+                                        
+                                        Text("vs Max")
+                                            .font(.system(size: 12, weight: .regular))
+                                            .foregroundColor(.gray)
+                                    }
+                                    
+                                    // CO2 Usage vs Max Visualization
+                                    HStack(spacing: 16) {
+                                        // Usage Bar
+                                        VStack(spacing: 6) {
+                                            HStack(alignment: .bottom, spacing: 12) {
+                                                // Used
+                                                VStack(spacing: 4) {
+                                                    RoundedRectangle(cornerRadius: 6)
+                                                        .fill(Color.green)
+                                                        .frame(width: 32, height: 48)
+                                                    
+                                                    Text("2.4")
+                                                        .font(.system(size: 12, weight: .bold))
+                                                        .foregroundColor(.green)
+                                                    
+                                                    Text("Used")
+                                                        .font(.system(size: 10, weight: .medium))
+                                                        .foregroundColor(.green)
+                                                }
+                                                
+                                                // Max Allowed
+                                                VStack(spacing: 4) {
+                                                    RoundedRectangle(cornerRadius: 6)
+                                                        .fill(Color.gray.opacity(0.2))
+                                                        .frame(width: 32, height: 60)
+                                                    
+                                                    Text("3.0")
+                                                        .font(.system(size: 12, weight: .medium))
+                                                        .foregroundColor(.gray)
+                                                    
+                                                    Text("Max")
+                                                        .font(.system(size: 10, weight: .medium))
+                                                        .foregroundColor(.gray)
+                                                }
+                                            }
+                                        }
+                                        
+                                        Spacer()
+                                        
+                                        // Status Indicator
+                                        VStack(spacing: 4) {
+                                            Circle()
+                                                .fill(Color.green)
+                                                .frame(width: 12, height: 12)
+                                            
+                                            Text("Good")
+                                                .font(.system(size: 12, weight: .bold))
+                                                .foregroundColor(.green)
+                                            
+                                            Text("80%")
+                                                .font(.system(size: 10, weight: .regular))
                                                 .foregroundColor(.gray)
                                         }
                                     }
-                                    
-                                    Spacer()
-                                    
-                                    Image(systemName: "chevron.right")
-                                        .font(.system(size: 16, weight: .semibold))
-                                        .foregroundColor(.gray)
                                 }
+                                .padding(16)
+                                .background(Color.white)
                             }
-                            .padding(24)
-                            .background(Color.black)
                             .cornerRadius(24)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 24)
+                                    .stroke(Color.black, lineWidth: 2)
+                            )
                         }
                         .padding(.horizontal, 24)
                         
@@ -481,26 +549,29 @@ struct HomeScreen: View {
                             .frame(height: 20)
                         
                         // Square Widgets Row
-                        HStack(spacing: 8) {
+                        HStack(spacing: 16) {
                             // Daily Average Widget
-                            VStack(spacing: 16) {
+                            VStack(spacing: 10) {
                                 VStack(alignment: .leading, spacing: 6) {
                                     Text("Daily Average")
                                         .font(.system(size: 15, weight: .regular))
                                         .foregroundColor(.gray)
                                     
                                     Text("1.8")
-                                        .font(.system(size: 32, weight: .bold))
+                                        .font(.system(size: 30, weight: .bold))
                                         .foregroundColor(.green)
                                     
                                     Text("kg CO₂e")
                                         .font(.system(size: 13, weight: .medium))
                                         .foregroundColor(.gray)
                                 }
+                                .frame(maxWidth: .infinity, alignment: .leading)
                                 
                                 Spacer()
                             }
-                            .padding(24)
+                            .frame(maxWidth: .infinity)
+                            .aspectRatio(1, contentMode: .fit)
+                            .padding(16)
                             .background(Color.white)
                             .cornerRadius(20)
                             .overlay(
@@ -509,24 +580,27 @@ struct HomeScreen: View {
                             )
                             
                             // Monthly Goal Widget
-                            VStack(spacing: 16) {
+                            VStack(spacing: 10) {
                                 VStack(alignment: .leading, spacing: 6) {
                                     Text("Monthly Goal")
                                         .font(.system(size: 15, weight: .regular))
                                         .foregroundColor(.gray)
                                     
                                     Text("75%")
-                                        .font(.system(size: 32, weight: .bold))
+                                        .font(.system(size: 30, weight: .bold))
                                         .foregroundColor(.green)
                                     
                                     Text("of 50kg")
                                         .font(.system(size: 13, weight: .medium))
                                         .foregroundColor(.gray)
                                 }
+                                .frame(maxWidth: .infinity, alignment: .leading)
                                 
                                 Spacer()
                             }
-                            .padding(24)
+                            .frame(maxWidth: .infinity)
+                            .aspectRatio(1, contentMode: .fit)
+                            .padding(16)
                             .background(Color.white)
                             .cornerRadius(20)
                             .overlay(
@@ -537,7 +611,7 @@ struct HomeScreen: View {
                         .padding(.horizontal, 24)
                         
                         Spacer()
-                            .frame(height: 32)
+                            .frame(height: 20)
                         
                         // Camera Button
                         Button(action: {
@@ -559,63 +633,61 @@ struct HomeScreen: View {
                         .padding(.horizontal, 24)
                         
                         Spacer()
-                            .frame(height: 100)
                     }
                 }
+                .navigationBarHidden(true)
             }
-            .navigationBarHidden(true)
-        }
-        .sheet(isPresented: $showCamera) {
-            CameraView(isPresented: $showCamera)
-        }
-        .sheet(isPresented: $showCarbonLog) {
-            CarbonFootprintLogView(isPresented: $showCarbonLog)
-        }
-        .alert("Camera Access Required", isPresented: $showCameraPermissionAlert) {
-            Button("Settings") {
-                openAppSettings()
+            .sheet(isPresented: $showCamera) {
+                CameraView(isPresented: $showCamera)
             }
-            Button("Cancel", role: .cancel) { }
-        } message: {
-            Text("C.AI₂ needs camera access to scan items. Please enable camera access in Settings.")
+            .sheet(isPresented: $showCarbonLog) {
+                CarbonFootprintLogView(isPresented: $showCarbonLog)
+            }
+            .alert("Camera Access Required", isPresented: $showCameraPermissionAlert) {
+                Button("Settings") {
+                    openAppSettings()
+                }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("C.AI₂ needs camera access to scan items. Please enable camera access in Settings.")
+            }
+            .onAppear {
+                checkCameraPermissionStatus()
+            }
         }
-        .onAppear {
-            checkCameraPermissionStatus()
+        
+        private func checkCameraPermissionStatus() {
+            cameraPermissionStatus = AVCaptureDevice.authorizationStatus(for: .video)
         }
-    }
-    
-    private func checkCameraPermissionStatus() {
-        cameraPermissionStatus = AVCaptureDevice.authorizationStatus(for: .video)
-    }
-    
-    private func checkCameraPermissionAndOpen() {
-        switch cameraPermissionStatus {
-        case .authorized:
-            showCamera = true
-        case .notDetermined:
-            AVCaptureDevice.requestAccess(for: .video) { granted in
-                DispatchQueue.main.async {
-                    cameraPermissionStatus = granted ? .authorized : .denied
-                    if granted {
-                        showCamera = true
-                    } else {
-                        showCameraPermissionAlert = true
+        
+        private func checkCameraPermissionAndOpen() {
+            switch cameraPermissionStatus {
+            case .authorized:
+                showCamera = true
+            case .notDetermined:
+                AVCaptureDevice.requestAccess(for: .video) { granted in
+                    DispatchQueue.main.async {
+                        cameraPermissionStatus = granted ? .authorized : .denied
+                        if granted {
+                            showCamera = true
+                        } else {
+                            showCameraPermissionAlert = true
+                        }
                     }
                 }
+            case .denied, .restricted:
+                showCameraPermissionAlert = true
+            @unknown default:
+                showCameraPermissionAlert = true
             }
-        case .denied, .restricted:
-            showCameraPermissionAlert = true
-        @unknown default:
-            showCameraPermissionAlert = true
+        }
+        
+        private func openAppSettings() {
+            if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(settingsUrl)
+            }
         }
     }
-    
-    private func openAppSettings() {
-        if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
-            UIApplication.shared.open(settingsUrl)
-        }
-    }
-}
 
 // MARK: - Carbon Footprint Log View
 struct CarbonFootprintLogView: View {
@@ -1664,14 +1736,19 @@ struct CameraView: View {
                         Button(action: {
                             // Calculate crop rectangle relative to the camera preview
                             let screenBounds = UIScreen.main.bounds
-                            let previewFrame = CGRect(x: 0, y: 0, width: screenBounds.width, height: screenBounds.height)
                             
-                            // Convert viewfinder frame to preview coordinates
+                            // The viewfinder is centered in the screen
+                            let centerX = screenBounds.width / 2
+                            let centerY = screenBounds.height / 2
+                            
+                            // Create a smaller, more focused square crop rectangle
+                            let squareSize: CGFloat = 240  // Reduced from 280 to focus more
+                            let rightOffset: CGFloat = 15  // Shift slightly to the right
                             let cropRect = CGRect(
-                                x: viewfinderFrame.origin.x,
-                                y: viewfinderFrame.origin.y - previewFrame.origin.y,
-                                width: viewfinderFrame.width,
-                                height: viewfinderFrame.height
+                                x: centerX - (squareSize / 2) + rightOffset,
+                                y: centerY - (squareSize / 2),
+                                width: squareSize,
+                                height: squareSize
                             )
                             
                             cameraManager.capturePhotoWithCrop(cropRect: cropRect) { image in
@@ -1875,28 +1952,53 @@ extension CameraManager: AVCapturePhotoCaptureDelegate {
     private func cropImage(_ image: UIImage, toRect cropRect: CGRect) -> UIImage {
         guard let cgImage = image.cgImage else { return image }
         
-        // Convert cropRect from view coordinates to image coordinates
-        let imageSize = image.size
-        let viewSize = cameraPreviewLayer?.bounds.size ?? imageSize
+        // Get the actual image dimensions
+        let imageSize = CGSize(width: cgImage.width, height: cgImage.height)
         
-        // Calculate scale factors
-        let scaleX = imageSize.width / viewSize.width
-        let scaleY = imageSize.height / viewSize.height
+        // Get the preview layer size (this represents the screen coordinates)
+        let previewSize = cameraPreviewLayer?.bounds.size ?? UIScreen.main.bounds.size
         
-        // Convert crop rectangle to image coordinates
+        // Calculate the aspect ratio of the image vs preview
+        let imageAspectRatio = imageSize.width / imageSize.height
+        let previewAspectRatio = previewSize.width / previewSize.height
+        
+        // Determine how the image is fitted in the preview (aspect fit)
+        let scaleX: CGFloat
+        let scaleY: CGFloat
+        let offsetX: CGFloat
+        let offsetY: CGFloat
+        
+        if imageAspectRatio > previewAspectRatio {
+            // Image is wider than preview - letterboxed vertically
+            scaleX = imageSize.width / previewSize.width
+            scaleY = scaleX
+            offsetX = 0
+            offsetY = (imageSize.height - previewSize.height * scaleY) / 2
+        } else {
+            // Image is taller than preview - letterboxed horizontally
+            scaleY = imageSize.height / previewSize.height
+            scaleX = scaleY
+            offsetX = (imageSize.width - previewSize.width * scaleX) / 2
+            offsetY = 0
+        }
+        
+        // Convert crop rectangle from screen coordinates to image coordinates
         let imageCropRect = CGRect(
-            x: cropRect.origin.x * scaleX,
-            y: cropRect.origin.y * scaleY,
+            x: cropRect.origin.x * scaleX + offsetX,
+            y: cropRect.origin.y * scaleY + offsetY,
             width: cropRect.width * scaleX,
             height: cropRect.height * scaleY
         )
         
-        // Ensure the crop rect is within image bounds
+        // Ensure the crop rect is within image bounds and is square
+        let maxSize = min(imageCropRect.width, imageCropRect.height)
+        let squareSize = min(maxSize, min(imageSize.width, imageSize.height))
+        
         let clampedRect = CGRect(
-            x: max(0, min(imageCropRect.origin.x, imageSize.width - imageCropRect.width)),
-            y: max(0, min(imageCropRect.origin.y, imageSize.height - imageCropRect.height)),
-            width: min(imageCropRect.width, imageSize.width),
-            height: min(imageCropRect.height, imageSize.height)
+            x: max(0, min(imageCropRect.origin.x, imageSize.width - squareSize)),
+            y: max(0, min(imageCropRect.origin.y, imageSize.height - squareSize)),
+            width: squareSize,
+            height: squareSize
         )
         
         // Crop the image
@@ -1987,11 +2089,6 @@ struct ImageReviewView: View {
                     Text("Item Captured")
                         .font(.system(size: 24, weight: .bold))
                         .foregroundColor(.black)
-                    
-                    Text("Analyzing carbon footprint...")
-                        .font(.system(size: 16))
-                        .foregroundColor(.gray)
-                        .multilineTextAlignment(.center)
                 }
                 
                 Spacer()
@@ -2000,15 +2097,15 @@ struct ImageReviewView: View {
                     showAnalysis = true
                 }) {
                     Text("Analyze Carbon Impact")
-                        .font(.system(size: 17, weight: .semibold))
+                        .font(.system(size: 18, weight: .semibold))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
-                        .frame(height: 56)
+                        .frame(height: 64)
                         .background(Color.black)
-                        .cornerRadius(16)
+                        .cornerRadius(20)
                 }
                 .padding(.horizontal, 24)
-                .padding(.bottom, 32)
+                .padding(.bottom, 40)
             }
             .navigationTitle("Review")
             .navigationBarTitleDisplayMode(.inline)
@@ -2051,10 +2148,6 @@ struct CarbonAnalysisView: View {
                         ProgressView()
                             .scaleEffect(1.5)
                             .tint(.green)
-                        
-                        Text("Analyzing carbon footprint...")
-                            .font(.system(size: 18, weight: .medium))
-                            .foregroundColor(.gray)
                         
                         Text("Using AI to identify item and calculate environmental impact")
                             .font(.system(size: 14, weight: .regular))
