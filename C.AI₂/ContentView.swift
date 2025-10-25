@@ -481,26 +481,26 @@ struct HomeScreen: View {
                             .frame(height: 20)
                         
                         // Square Widgets Row
-                        HStack(spacing: 12) {
+                        HStack(spacing: 8) {
                             // Daily Average Widget
-                            VStack(spacing: 12) {
-                                VStack(alignment: .leading, spacing: 4) {
+                            VStack(spacing: 16) {
+                                VStack(alignment: .leading, spacing: 6) {
                                     Text("Daily Average")
-                                        .font(.system(size: 14, weight: .regular))
+                                        .font(.system(size: 15, weight: .regular))
                                         .foregroundColor(.gray)
                                     
                                     Text("1.8")
-                                        .font(.system(size: 28, weight: .bold))
+                                        .font(.system(size: 32, weight: .bold))
                                         .foregroundColor(.green)
                                     
                                     Text("kg CO₂e")
-                                        .font(.system(size: 12, weight: .medium))
+                                        .font(.system(size: 13, weight: .medium))
                                         .foregroundColor(.gray)
                                 }
                                 
                                 Spacer()
                             }
-                            .padding(20)
+                            .padding(24)
                             .background(Color.white)
                             .cornerRadius(20)
                             .overlay(
@@ -509,24 +509,24 @@ struct HomeScreen: View {
                             )
                             
                             // Monthly Goal Widget
-                            VStack(spacing: 12) {
-                                VStack(alignment: .leading, spacing: 4) {
+                            VStack(spacing: 16) {
+                                VStack(alignment: .leading, spacing: 6) {
                                     Text("Monthly Goal")
-                                        .font(.system(size: 14, weight: .regular))
+                                        .font(.system(size: 15, weight: .regular))
                                         .foregroundColor(.gray)
                                     
                                     Text("75%")
-                                        .font(.system(size: 28, weight: .bold))
+                                        .font(.system(size: 32, weight: .bold))
                                         .foregroundColor(.green)
                                     
                                     Text("of 50kg")
-                                        .font(.system(size: 12, weight: .medium))
+                                        .font(.system(size: 13, weight: .medium))
                                         .foregroundColor(.gray)
                                 }
                                 
                                 Spacer()
                             }
-                            .padding(20)
+                            .padding(24)
                             .background(Color.white)
                             .cornerRadius(20)
                             .overlay(
@@ -802,6 +802,7 @@ struct AIReductionTipsView: View {
     @State private var suggestions: [AIReductionSuggestion] = []
     @State private var isAnalyzing = true
     @State private var showContent = false
+    @State private var selectedCardId: UUID? = nil
     
     var body: some View {
         NavigationView {
@@ -869,7 +870,10 @@ struct AIReductionTipsView: View {
                             // AI Suggestions
                             LazyVStack(spacing: 12) {
                                 ForEach(Array(suggestions.enumerated()), id: \.element.id) { index, suggestion in
-                                    AIReductionSuggestionCard(suggestion: suggestion)
+                                    AIReductionSuggestionCard(
+                                        suggestion: suggestion,
+                                        selectedCardId: $selectedCardId
+                                    )
                                         .opacity(showContent ? 1 : 0)
                                         .offset(y: showContent ? 0 : 20)
                                         .animation(
@@ -977,7 +981,12 @@ struct AIReductionSuggestion: Identifiable {
 // MARK: - AI Reduction Suggestion Card
 struct AIReductionSuggestionCard: View {
     let suggestion: AIReductionSuggestion
+    @Binding var selectedCardId: UUID?
     @State private var isPressed = false
+    
+    private var isSelected: Bool {
+        selectedCardId == suggestion.id
+    }
     
     var body: some View {
         VStack(spacing: 16) {
@@ -1012,21 +1021,27 @@ struct AIReductionSuggestionCard: View {
                 .multilineTextAlignment(.leading)
                 .lineSpacing(2)
             
-            // Reasoning
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Why this works")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundColor(.gray)
-                
-                Text(suggestion.reasoning)
-                    .font(.system(size: 14, weight: .regular))
-                    .foregroundColor(.gray)
-                    .multilineTextAlignment(.leading)
-                    .lineSpacing(2)
+            // Expandable Reasoning Section
+            if isSelected {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Why this works")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(.gray)
+                    
+                    Text(suggestion.reasoning)
+                        .font(.system(size: 14, weight: .regular))
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.leading)
+                        .lineSpacing(2)
+                }
+                .padding(16)
+                .background(Color(.systemGray6).opacity(0.5))
+                .cornerRadius(12)
+                .transition(.asymmetric(
+                    insertion: .opacity.combined(with: .move(edge: .top)),
+                    removal: .opacity.combined(with: .move(edge: .top))
+                ))
             }
-            .padding(16)
-            .background(Color(.systemGray6).opacity(0.5))
-            .cornerRadius(12)
             
             // Implementation Details
             HStack(spacing: 20) {
@@ -1058,17 +1073,31 @@ struct AIReductionSuggestionCard: View {
         .cornerRadius(20)
         .overlay(
             RoundedRectangle(cornerRadius: 20)
-                .stroke(Color(.systemGray5), lineWidth: 1)
+                .stroke(
+                    isSelected ? Color.green : Color(.systemGray5),
+                    lineWidth: isSelected ? 2 : 1
+                )
         )
         .scaleEffect(isPressed ? 0.98 : 1.0)
         .animation(.easeInOut(duration: 0.1), value: isPressed)
+        .animation(.easeInOut(duration: 0.3), value: isSelected)
         .onTapGesture {
             withAnimation(.easeInOut(duration: 0.1)) {
                 isPressed = true
             }
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 withAnimation(.easeInOut(duration: 0.1)) {
                     isPressed = false
+                }
+            }
+            
+            // Toggle selection
+            withAnimation(.easeInOut(duration: 0.3)) {
+                if isSelected {
+                    selectedCardId = nil
+                } else {
+                    selectedCardId = suggestion.id
                 }
             }
         }
@@ -1561,6 +1590,7 @@ struct CameraView: View {
     @State private var capturedImage: UIImage?
     @State private var showImagePicker = false
     @StateObject private var cameraManager = CameraManager()
+    @State private var viewfinderFrame: CGRect = .zero
     
     var body: some View {
         NavigationView {
@@ -1598,6 +1628,17 @@ struct CameraView: View {
                         .strokeBorder(Color.white, lineWidth: 3)
                         .frame(width: 280, height: 280)
                         .allowsHitTesting(false)
+                        .background(
+                            GeometryReader { geometry in
+                                Color.clear
+                                    .onAppear {
+                                        viewfinderFrame = geometry.frame(in: .global)
+                                    }
+                                    .onChange(of: geometry.frame(in: .global)) { newFrame in
+                                        viewfinderFrame = newFrame
+                                    }
+                            }
+                        )
                     
                     Text("Point camera at item")
                         .font(.system(size: 17, weight: .medium))
@@ -1621,7 +1662,19 @@ struct CameraView: View {
                         
                         // Capture button
                         Button(action: {
-                            cameraManager.capturePhoto { image in
+                            // Calculate crop rectangle relative to the camera preview
+                            let screenBounds = UIScreen.main.bounds
+                            let previewFrame = CGRect(x: 0, y: 0, width: screenBounds.width, height: screenBounds.height)
+                            
+                            // Convert viewfinder frame to preview coordinates
+                            let cropRect = CGRect(
+                                x: viewfinderFrame.origin.x,
+                                y: viewfinderFrame.origin.y - previewFrame.origin.y,
+                                width: viewfinderFrame.width,
+                                height: viewfinderFrame.height
+                            )
+                            
+                            cameraManager.capturePhotoWithCrop(cropRect: cropRect) { image in
                                 capturedImage = image
                             }
                         }) {
@@ -1677,6 +1730,7 @@ class CameraManager: NSObject, ObservableObject {
     
     var onImageCaptured: ((UIImage) -> Void)?
     private weak var cameraPreviewLayer: AVCaptureVideoPreviewLayer?
+    private var cropRect: CGRect?
     
     override init() {
         super.init()
@@ -1747,6 +1801,27 @@ class CameraManager: NSObject, ObservableObject {
         photoOutput.capturePhoto(with: settings, delegate: self)
     }
     
+    func capturePhotoWithCrop(cropRect: CGRect, completion: @escaping (UIImage) -> Void) {
+        onImageCaptured = completion
+        self.cropRect = cropRect
+        
+        guard let photoOutput = capturePhotoOutput,
+              let session = captureSession,
+              session.isRunning else {
+            print("Camera not ready")
+            return
+        }
+        
+        let settings: AVCapturePhotoSettings
+        if photoOutput.availablePhotoCodecTypes.contains(.hevc) {
+            settings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc])
+        } else {
+            settings = AVCapturePhotoSettings()
+        }
+        
+        photoOutput.capturePhoto(with: settings, delegate: self)
+    }
+    
     func switchCamera() {
         guard let session = captureSession else { return }
         
@@ -1787,8 +1862,47 @@ extension CameraManager: AVCapturePhotoCaptureDelegate {
               let image = UIImage(data: imageData) else { return }
         
         DispatchQueue.main.async {
-            self.onImageCaptured?(image)
+            if let cropRect = self.cropRect {
+                // Crop the image to the specified rectangle
+                let croppedImage = self.cropImage(image, toRect: cropRect)
+                self.onImageCaptured?(croppedImage)
+            } else {
+                self.onImageCaptured?(image)
+            }
         }
+    }
+    
+    private func cropImage(_ image: UIImage, toRect cropRect: CGRect) -> UIImage {
+        guard let cgImage = image.cgImage else { return image }
+        
+        // Convert cropRect from view coordinates to image coordinates
+        let imageSize = image.size
+        let viewSize = cameraPreviewLayer?.bounds.size ?? imageSize
+        
+        // Calculate scale factors
+        let scaleX = imageSize.width / viewSize.width
+        let scaleY = imageSize.height / viewSize.height
+        
+        // Convert crop rectangle to image coordinates
+        let imageCropRect = CGRect(
+            x: cropRect.origin.x * scaleX,
+            y: cropRect.origin.y * scaleY,
+            width: cropRect.width * scaleX,
+            height: cropRect.height * scaleY
+        )
+        
+        // Ensure the crop rect is within image bounds
+        let clampedRect = CGRect(
+            x: max(0, min(imageCropRect.origin.x, imageSize.width - imageCropRect.width)),
+            y: max(0, min(imageCropRect.origin.y, imageSize.height - imageCropRect.height)),
+            width: min(imageCropRect.width, imageSize.width),
+            height: min(imageCropRect.height, imageSize.height)
+        )
+        
+        // Crop the image
+        guard let croppedCGImage = cgImage.cropping(to: clampedRect) else { return image }
+        
+        return UIImage(cgImage: croppedCGImage, scale: image.scale, orientation: image.imageOrientation)
     }
 }
 
