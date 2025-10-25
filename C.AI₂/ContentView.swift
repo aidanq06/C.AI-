@@ -1193,15 +1193,15 @@ struct DrivingScreen: View {
                                     // Active tracking state
                                     HStack {
                                         VStack(alignment: .leading, spacing: 8) {
-                                            HStack(spacing: 8) {
-                                                Circle()
-                                                    .fill(Color.green)
-                                                    .frame(width: 8, height: 8)
-                                                
-                                                Text("Tracking Route")
-                                                    .font(.system(size: 16, weight: .medium))
-                                                    .foregroundColor(.black)
-                                            }
+                                        HStack(spacing: 8) {
+                                            Circle()
+                                                .fill(Color.red)
+                                                .frame(width: 8, height: 8)
+                                            
+                                            Text("Tracking Route")
+                                                .font(.system(size: 16, weight: .medium))
+                                                .foregroundColor(.black)
+                                        }
                                             
                                             HStack(spacing: 24) {
                                                 VStack(alignment: .leading, spacing: 4) {
@@ -1214,15 +1214,15 @@ struct DrivingScreen: View {
                                                         .foregroundColor(.black)
                                                 }
                                                 
-                                                VStack(alignment: .leading, spacing: 4) {
-                                                    Text("CO₂ Emissions")
-                                                        .font(.system(size: 14, weight: .regular))
-                                                        .foregroundColor(.gray)
-                                                    
-                                                    Text(String(format: "%.1f kg", locationManager.estimatedCO2))
-                                                        .font(.system(size: 28, weight: .bold))
-                                                        .foregroundColor(.green)
-                                                }
+                                            VStack(alignment: .leading, spacing: 4) {
+                                                Text("CO₂ Emissions")
+                                                    .font(.system(size: 14, weight: .regular))
+                                                    .foregroundColor(.gray)
+                                                
+                                                Text(String(format: "%.1f kg", locationManager.estimatedCO2))
+                                                    .font(.system(size: 28, weight: .bold))
+                                                    .foregroundColor(.red)
+                                            }
                                                 
                                                 Spacer()
                                             }
@@ -1249,7 +1249,7 @@ struct DrivingScreen: View {
                                         HStack {
                                             Image(systemName: "car.fill")
                                                 .font(.system(size: 24))
-                                                .foregroundColor(.green)
+                                                .foregroundColor(.red)
                                             
                                             Spacer()
                                             
@@ -1271,7 +1271,7 @@ struct DrivingScreen: View {
                                                 .foregroundColor(.white)
                                                 .frame(maxWidth: .infinity)
                                                 .frame(height: 56)
-                                                .background(Color.green)
+                                                .background(Color.red)
                                                 .cornerRadius(16)
                                         }
                                     }
@@ -1333,7 +1333,7 @@ struct ScreenTimeScreen: View {
                             VStack(spacing: 24) {
                                 ProgressView()
                                     .scaleEffect(1.5)
-                                    .tint(.green)
+                                    .tint(.blue)
                                 
                                 Text("Analyzing device usage...")
                                     .font(.system(size: 18, weight: .medium))
@@ -2183,7 +2183,7 @@ struct MapView: View {
                                 
                                 Text(String(format: "%.1f kg", locationManager.estimatedCO2))
                                     .font(.system(size: 28, weight: .bold))
-                                    .foregroundColor(.green)
+                                    .foregroundColor(.red)
                             }
                         }
                         
@@ -2209,7 +2209,7 @@ struct MapView: View {
                                         .foregroundColor(.white)
                                         .frame(maxWidth: .infinity)
                                         .frame(height: 50)
-                                        .background(Color.green)
+                                        .background(Color.red)
                                         .cornerRadius(16)
                                 }
                             }
