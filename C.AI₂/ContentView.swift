@@ -801,8 +801,7 @@ struct AIReductionTipsView: View {
     @Binding var isPresented: Bool
     @State private var suggestions: [AIReductionSuggestion] = []
     @State private var isAnalyzing = true
-    @State private var showSuggestions = false
-    @State private var animateCards = false
+    @State private var showContent = false
     
     var body: some View {
         NavigationView {
@@ -812,15 +811,15 @@ struct AIReductionTipsView: View {
                 
                 ScrollView {
                     VStack(spacing: 0) {
-                        // Header with subtle animation
-                        VStack(spacing: 20) {
+                        // Header
+                        VStack(spacing: 16) {
                             HStack {
                                 Text("AI Reduction Tips")
                                     .font(.system(size: 28, weight: .bold))
                                     .foregroundColor(.black)
-                                    .opacity(showSuggestions ? 1 : 0)
-                                    .offset(y: showSuggestions ? 0 : -20)
-                                    .animation(.easeOut(duration: 0.6).delay(0.2), value: showSuggestions)
+                                    .opacity(showContent ? 1 : 0)
+                                    .offset(y: showContent ? 0 : -20)
+                                    .animation(.easeOut(duration: 0.6).delay(0.1), value: showContent)
                                 
                                 Spacer()
                             }
@@ -829,43 +828,32 @@ struct AIReductionTipsView: View {
                                 .font(.system(size: 16, weight: .regular))
                                 .foregroundColor(.gray)
                                 .multilineTextAlignment(.leading)
-                                .opacity(showSuggestions ? 1 : 0)
-                                .offset(y: showSuggestions ? 0 : -20)
-                                .animation(.easeOut(duration: 0.6).delay(0.4), value: showSuggestions)
+                                .opacity(showContent ? 1 : 0)
+                                .offset(y: showContent ? 0 : -20)
+                                .animation(.easeOut(duration: 0.6).delay(0.2), value: showContent)
                         }
                         .padding(.horizontal, 24)
                         .padding(.top, 20)
                         .padding(.bottom, 32)
                         
                         if isAnalyzing {
-                            // Enhanced Analysis Loading State
-                            VStack(spacing: 32) {
+                            // Analysis Loading State
+                            VStack(spacing: 24) {
                                 ZStack {
                                     Circle()
-                                        .stroke(Color.green.opacity(0.1), lineWidth: 3)
-                                        .frame(width: 80, height: 80)
+                                        .stroke(Color.green.opacity(0.1), lineWidth: 2)
+                                        .frame(width: 60, height: 60)
                                     
                                     Circle()
-                                        .trim(from: 0, to: 0.7)
-                                        .stroke(
-                                            LinearGradient(
-                                                colors: [Color.green.opacity(0.8), Color.green.opacity(0.4)],
-                                                startPoint: .topLeading,
-                                                endPoint: .bottomTrailing
-                                            ),
-                                            style: StrokeStyle(lineWidth: 3, lineCap: .round)
-                                        )
-                                        .frame(width: 80, height: 80)
-                                        .rotationEffect(.degrees(animateCards ? 360 : 0))
-                                        .animation(.linear(duration: 2).repeatForever(autoreverses: false), value: animateCards)
-                                    
-                                    Image(systemName: "brain.head.profile")
-                                        .font(.system(size: 24, weight: .medium))
-                                        .foregroundColor(.green)
+                                        .trim(from: 0, to: 0.3)
+                                        .stroke(Color.green, lineWidth: 2)
+                                        .frame(width: 60, height: 60)
+                                        .rotationEffect(.degrees(showContent ? 360 : 0))
+                                        .animation(.linear(duration: 1.5).repeatForever(autoreverses: false), value: showContent)
                                 }
                                 
-                                VStack(spacing: 12) {
-                                    Text("Analyzing your carbon footprint...")
+                                VStack(spacing: 8) {
+                                    Text("Analyzing your carbon footprint")
                                         .font(.system(size: 18, weight: .medium))
                                         .foregroundColor(.black)
                                     
@@ -878,16 +866,16 @@ struct AIReductionTipsView: View {
                             .frame(maxWidth: .infinity)
                             .frame(height: 200)
                         } else {
-                            // AI Suggestions with staggered animations
-                            LazyVStack(spacing: 20) {
+                            // AI Suggestions
+                            LazyVStack(spacing: 12) {
                                 ForEach(Array(suggestions.enumerated()), id: \.element.id) { index, suggestion in
                                     AIReductionSuggestionCard(suggestion: suggestion)
-                                        .opacity(showSuggestions ? 1 : 0)
-                                        .offset(y: showSuggestions ? 0 : 30)
+                                        .opacity(showContent ? 1 : 0)
+                                        .offset(y: showContent ? 0 : 20)
                                         .animation(
-                                            .easeOut(duration: 0.6)
-                                            .delay(Double(index) * 0.15 + 0.6),
-                                            value: showSuggestions
+                                            .easeOut(duration: 0.5)
+                                            .delay(Double(index) * 0.1 + 0.3),
+                                            value: showContent
                                         )
                                 }
                             }
@@ -910,7 +898,7 @@ struct AIReductionTipsView: View {
             )
         }
         .onAppear {
-            animateCards = true
+            showContent = true
             generateAISuggestions()
         }
     }
@@ -927,8 +915,7 @@ struct AIReductionTipsView: View {
                     reasoning: "Same travel time, 70% less emissions. The bus route runs parallel to your driving route.",
                     difficulty: "Easy",
                     timeToImplement: "5 minutes",
-                    category: "Transportation",
-                    priority: "High"
+                    category: "Transportation"
                 ),
                 AIReductionSuggestion(
                     id: UUID(),
@@ -938,8 +925,7 @@ struct AIReductionTipsView: View {
                     reasoning: "Your beef consumption is 3x the average. Plant proteins have 90% lower carbon intensity.",
                     difficulty: "Medium",
                     timeToImplement: "2 hours",
-                    category: "Food",
-                    priority: "High"
+                    category: "Food"
                 ),
                 AIReductionSuggestion(
                     id: UUID(),
@@ -949,8 +935,7 @@ struct AIReductionTipsView: View {
                     reasoning: "You make 4 separate trips weekly. Batching reduces this to 2 trips, cutting emissions by 50%.",
                     difficulty: "Easy",
                     timeToImplement: "10 minutes",
-                    category: "Transportation",
-                    priority: "Medium"
+                    category: "Transportation"
                 ),
                 AIReductionSuggestion(
                     id: UUID(),
@@ -960,8 +945,7 @@ struct AIReductionTipsView: View {
                     reasoning: "Your evening screen time uses 40% more energy. Dark mode reduces OLED power consumption by 60%.",
                     difficulty: "Easy",
                     timeToImplement: "1 minute",
-                    category: "Digital",
-                    priority: "Low"
+                    category: "Digital"
                 )
             ]
             
@@ -969,9 +953,9 @@ struct AIReductionTipsView: View {
                 isAnalyzing = false
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 withAnimation(.easeOut(duration: 0.6)) {
-                    showSuggestions = true
+                    showContent = true
                 }
             }
         }
@@ -988,7 +972,6 @@ struct AIReductionSuggestion: Identifiable {
     let difficulty: String
     let timeToImplement: String
     let category: String
-    let priority: String
 }
 
 // MARK: - AI Reduction Suggestion Card
@@ -997,20 +980,13 @@ struct AIReductionSuggestionCard: View {
     @State private var isPressed = false
     
     var body: some View {
-        VStack(spacing: 20) {
-            // Header with priority indicator
+        VStack(spacing: 16) {
+            // Header
             HStack {
-                VStack(alignment: .leading, spacing: 6) {
-                    HStack(spacing: 8) {
-                        Text(suggestion.title)
-                            .font(.system(size: 18, weight: .bold))
-                            .foregroundColor(.black)
-                        
-                        // Priority indicator
-                        Circle()
-                            .fill(priorityColor)
-                            .frame(width: 8, height: 8)
-                    }
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(suggestion.title)
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(.black)
                     
                     Text(suggestion.impact)
                         .font(.system(size: 16, weight: .semibold))
@@ -1019,40 +995,28 @@ struct AIReductionSuggestionCard: View {
                 
                 Spacer()
                 
-                // Category Badge with enhanced design
+                // Category Badge
                 Text(suggestion.category)
                     .font(.system(size: 12, weight: .medium))
-                    .foregroundColor(.white)
+                    .foregroundColor(.gray)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)
-                    .background(
-                        LinearGradient(
-                            colors: [Color.green.opacity(0.8), Color.green.opacity(0.6)],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
+                    .background(Color(.systemGray6))
                     .cornerRadius(12)
             }
             
-            // Description with better typography
+            // Description
             Text(suggestion.description)
                 .font(.system(size: 15, weight: .regular))
                 .foregroundColor(.black)
                 .multilineTextAlignment(.leading)
                 .lineSpacing(2)
             
-            // Enhanced Reasoning section
-            VStack(alignment: .leading, spacing: 12) {
-                HStack(spacing: 6) {
-                    Image(systemName: "lightbulb.fill")
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(.green)
-                    
-                    Text("Why this works")
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(.black)
-                }
+            // Reasoning
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Why this works")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundColor(.gray)
                 
                 Text(suggestion.reasoning)
                     .font(.system(size: 14, weight: .regular))
@@ -1064,44 +1028,32 @@ struct AIReductionSuggestionCard: View {
             .background(Color(.systemGray6).opacity(0.5))
             .cornerRadius(12)
             
-            // Implementation Details with enhanced layout
+            // Implementation Details
             HStack(spacing: 20) {
-                HStack(spacing: 8) {
-                    Image(systemName: "gauge.badge.plus")
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Difficulty")
                         .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(difficultyColor)
+                        .foregroundColor(.gray)
                     
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Difficulty")
-                            .font(.system(size: 11, weight: .medium))
-                            .foregroundColor(.gray)
-                        
-                        Text(suggestion.difficulty)
-                            .font(.system(size: 13, weight: .semibold))
-                            .foregroundColor(difficultyColor)
-                    }
+                    Text(suggestion.difficulty)
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(difficultyColor)
                 }
                 
                 Spacer()
                 
-                HStack(spacing: 8) {
-                    Image(systemName: "clock.fill")
+                VStack(alignment: .trailing, spacing: 2) {
+                    Text("Time")
                         .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(.blue)
+                        .foregroundColor(.gray)
                     
-                    VStack(alignment: .trailing, spacing: 2) {
-                        Text("Time")
-                            .font(.system(size: 11, weight: .medium))
-                            .foregroundColor(.gray)
-                        
-                        Text(suggestion.timeToImplement)
-                            .font(.system(size: 13, weight: .semibold))
-                            .foregroundColor(.black)
-                    }
+                    Text(suggestion.timeToImplement)
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(.black)
                 }
             }
         }
-        .padding(24)
+        .padding(20)
         .background(Color.white)
         .cornerRadius(20)
         .overlay(
@@ -1127,15 +1079,6 @@ struct AIReductionSuggestionCard: View {
         case "Easy": return .green
         case "Medium": return .orange
         case "Hard": return .red
-        default: return .gray
-        }
-    }
-    
-    private var priorityColor: Color {
-        switch suggestion.priority {
-        case "High": return .red
-        case "Medium": return .orange
-        case "Low": return .green
         default: return .gray
         }
     }
@@ -1230,11 +1173,11 @@ struct DrivingScreen: View {
                                 HStack(spacing: 4) {
                                     Text("View Map")
                                         .font(.system(size: 16, weight: .medium))
-                                        .foregroundColor(.green)
+                                        .foregroundColor(.red)
                                     
                                     Image(systemName: "chevron.right")
                                         .font(.system(size: 14, weight: .semibold))
-                                        .foregroundColor(.green)
+                                        .foregroundColor(.red)
                                 }
                             }
                         }
