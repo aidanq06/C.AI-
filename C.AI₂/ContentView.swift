@@ -406,13 +406,13 @@ struct HomeScreen: View {
                     .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
-                        // Header
-                        HStack {
+                    // Header
+                    HStack {
                             Text("C.AI₂")
-                                .font(.system(size: 34, weight: .bold))
-                                .foregroundColor(.black)
-                            
-                            Spacer()
+                            .font(.system(size: 34, weight: .bold))
+                            .foregroundColor(.black)
+                        
+                        Spacer()
                             
                             // Help Button
                             Button(action: {
@@ -422,11 +422,11 @@ struct HomeScreen: View {
                                     .font(.system(size: 20, weight: .regular))
                                     .foregroundColor(.gray)
                             }
-                        }
-                        .padding(.horizontal, 24)
-                        .padding(.top, 20)
-                        .padding(.bottom, 24)
-                        
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.top, 20)
+                    .padding(.bottom, 24)
+                    
                         
                         // CO2 Card with White Extension
                         Button(action: {
@@ -434,45 +434,45 @@ struct HomeScreen: View {
                         }) {
                             VStack(spacing: 0) {
                                 // Black Section
-                                VStack(spacing: 20) {
-                                    HStack {
-                                        Image(systemName: "leaf.fill")
-                                            .font(.system(size: 28))
-                                            .foregroundColor(.green)
-                                        
-                                        Spacer()
-                                        
-                                        Text("Oct 24")
-                                            .font(.system(size: 15, weight: .medium))
-                                            .foregroundColor(.gray)
-                                    }
-                                    
-                                    HStack {
-                                        VStack(alignment: .leading, spacing: 8) {
-                                            Text("Carbon Footprint")
-                                                .font(.system(size: 17, weight: .regular))
-                                                .foregroundColor(.gray)
-                                            
-                                            HStack(alignment: .firstTextBaseline, spacing: 6) {
+                    VStack(spacing: 20) {
+                        HStack {
+                            Image(systemName: "leaf.fill")
+                                .font(.system(size: 28))
+                                .foregroundColor(.green)
+                            
+                            Spacer()
+                            
+                            Text("Oct 24")
+                                .font(.system(size: 15, weight: .medium))
+                                .foregroundColor(.gray)
+                        }
+                        
+                        HStack {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Carbon Footprint")
+                                    .font(.system(size: 17, weight: .regular))
+                                    .foregroundColor(.gray)
+                                
+                                HStack(alignment: .firstTextBaseline, spacing: 6) {
                                                 Text("2.4")
-                                                    .font(.system(size: 64, weight: .bold))
-                                                    .foregroundColor(.white)
-                                                
-                                                Text("kg CO₂e")
-                                                    .font(.system(size: 20, weight: .semibold))
-                                                    .foregroundColor(.gray)
-                                            }
-                                        }
-                                        
-                                        Spacer()
+                                        .font(.system(size: 64, weight: .bold))
+                                        .foregroundColor(.white)
+                                    
+                                    Text("kg CO₂e")
+                                        .font(.system(size: 20, weight: .semibold))
+                                        .foregroundColor(.gray)
+                                }
+                            }
+                            
+                            Spacer()
                                         
                                         Image(systemName: "chevron.right")
                                             .font(.system(size: 16, weight: .semibold))
                                             .foregroundColor(.gray)
-                                    }
-                                }
-                                .padding(24)
-                                .background(Color.black)
+                        }
+                    }
+                    .padding(24)
+                    .background(Color.black)
                                 
                                 // White Section with CO2 Visualization
                                 VStack(spacing: 12) {
@@ -529,7 +529,7 @@ struct HomeScreen: View {
                                 .padding(16)
                                 .background(Color.white)
                             }
-                            .cornerRadius(24)
+                    .cornerRadius(24)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 24)
                                     .stroke(Color.black, lineWidth: 2)
@@ -600,31 +600,31 @@ struct HomeScreen: View {
                                     .stroke(Color.black, lineWidth: 2)
                             )
                         }
-                        .padding(.horizontal, 24)
-                        
-                        Spacer()
-                            .frame(height: 20)
-                        
-                        // Camera Button
-                        Button(action: {
+                    .padding(.horizontal, 24)
+                    
+                    Spacer()
+                        .frame(height: 20)
+                    
+                    // Camera Button
+                    Button(action: {
                             checkCameraPermissionAndOpen()
-                        }) {
-                            HStack(spacing: 12) {
-                                Image(systemName: "camera.fill")
-                                    .font(.system(size: 22, weight: .semibold))
-                                
-                                Text("Scan Item")
-                                    .font(.system(size: 18, weight: .semibold))
-                            }
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 80)
-                            .background(Color.black)
-                            .cornerRadius(20)
+                    }) {
+                        HStack(spacing: 12) {
+                            Image(systemName: "camera.fill")
+                                .font(.system(size: 22, weight: .semibold))
+                            
+                            Text("Scan Item")
+                                .font(.system(size: 18, weight: .semibold))
                         }
-                        .padding(.horizontal, 24)
-                        
-                        Spacer()
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                            .frame(height: 80)
+                        .background(Color.black)
+                        .cornerRadius(20)
+                    }
+                    .padding(.horizontal, 24)
+                    
+                    Spacer()
                     }
                 }
                 .navigationBarHidden(true)
@@ -697,13 +697,13 @@ struct CarbonFootprintLogView: View {
                     VStack(spacing: 0) {
                         // Header Summary
                         VStack(spacing: 20) {
-                            HStack {
+                        HStack {
                                 Image(systemName: "leaf.fill")
                                     .font(.system(size: 28))
                                     .foregroundColor(.green)
-                                
-                                Spacer()
-                                
+                            
+                            Spacer()
+                            
                                 Text("Oct 24")
                                     .font(.system(size: 15, weight: .medium))
                                     .foregroundColor(.gray)
@@ -737,7 +737,7 @@ struct CarbonFootprintLogView: View {
                         .padding(.bottom, 24)
                         
                         // AI Reduction Suggestions Button
-                        Button(action: {
+                            Button(action: {
                             showAIReductionTips = true
                         }) {
                             HStack(spacing: 16) {
@@ -753,9 +753,9 @@ struct CarbonFootprintLogView: View {
                                 }
                                 
                                 Spacer()
-                                
-                                Image(systemName: "chevron.right")
-                                    .font(.system(size: 14, weight: .semibold))
+                                    
+                                    Image(systemName: "chevron.right")
+                                        .font(.system(size: 14, weight: .semibold))
                                     .foregroundColor(.gray)
                             }
                             .padding(20)
@@ -784,10 +784,10 @@ struct CarbonFootprintLogView: View {
                                     .foregroundColor(.black)
                                 
                                 Spacer()
-                            }
-                            .padding(.horizontal, 24)
-                            .padding(.bottom, 20)
-                            
+                        }
+                        .padding(.horizontal, 24)
+                        .padding(.bottom, 20)
+                        
                             LazyVStack(spacing: 12) {
                                 ForEach(carbonEntries) { entry in
                                     CarbonEntryRow(entry: entry)
@@ -878,7 +878,7 @@ struct AIReductionTipsView: View {
                     VStack(spacing: 0) {
                         // Header
                         VStack(spacing: 16) {
-                            HStack {
+                                HStack {
                                 Text("AI Reduction Tips")
                                     .font(.system(size: 28, weight: .bold))
                                     .foregroundColor(.black)
@@ -905,7 +905,7 @@ struct AIReductionTipsView: View {
                             // Analysis Loading State
                             VStack(spacing: 24) {
                                 ZStack {
-                                    Circle()
+                                            Circle()
                                         .stroke(Color.green.opacity(0.1), lineWidth: 2)
                                         .frame(width: 60, height: 60)
                                     
@@ -920,7 +920,7 @@ struct AIReductionTipsView: View {
                                 VStack(spacing: 8) {
                                     Text("Analyzing your carbon footprint")
                                         .font(.system(size: 18, weight: .medium))
-                                        .foregroundColor(.black)
+                                                .foregroundColor(.black)
                                     
                                     Text("Generating personalized reduction strategies")
                                         .font(.system(size: 14, weight: .regular))
@@ -1056,7 +1056,7 @@ struct AIReductionSuggestionCard: View {
         VStack(spacing: 16) {
             // Header
             HStack {
-                VStack(alignment: .leading, spacing: 4) {
+                                            VStack(alignment: .leading, spacing: 4) {
                     Text(suggestion.title)
                         .font(.system(size: 18, weight: .bold))
                         .foregroundColor(.black)
@@ -1093,8 +1093,8 @@ struct AIReductionSuggestionCard: View {
                         .foregroundColor(.gray)
                     
                     Text(suggestion.reasoning)
-                        .font(.system(size: 14, weight: .regular))
-                        .foregroundColor(.gray)
+                                                    .font(.system(size: 14, weight: .regular))
+                                                    .foregroundColor(.gray)
                         .multilineTextAlignment(.leading)
                         .lineSpacing(2)
                 }
@@ -1128,7 +1128,7 @@ struct AIReductionSuggestionCard: View {
                     
                     Text(suggestion.timeToImplement)
                         .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(.black)
+                                                    .foregroundColor(.black)
                 }
             }
         }
@@ -1206,14 +1206,14 @@ struct CarbonEntryRow: View {
             }
             
             // Content
-            VStack(alignment: .leading, spacing: 4) {
+                                            VStack(alignment: .leading, spacing: 4) {
                 Text(entry.title)
                     .font(.system(size: 16, weight: .medium))
                     .foregroundColor(.black)
                 
                 Text(entry.subtitle)
-                    .font(.system(size: 14, weight: .regular))
-                    .foregroundColor(.gray)
+                                                    .font(.system(size: 14, weight: .regular))
+                                                    .foregroundColor(.gray)
             }
             
             Spacer()
@@ -1222,7 +1222,7 @@ struct CarbonEntryRow: View {
             VStack(alignment: .trailing, spacing: 2) {
                 Text(String(format: "%.1f", entry.co2Amount))
                     .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(.green)
+                                                    .foregroundColor(.green)
                 
                 Text("kg CO₂e")
                     .font(.system(size: 12, weight: .medium))
@@ -1239,50 +1239,66 @@ struct CarbonEntryRow: View {
     }
 }
 
-// MARK: - Map Trail Component
+// MARK: - Apple Maps Style Map Trail Component
 struct MapTrailView: View {
     let routeID: Int
     
     var body: some View {
         ZStack {
+            // Apple Maps style background
             Rectangle()
-                .fill(Color.gray.opacity(0.05))
+                .fill(Color(red: 0.95, green: 0.95, blue: 0.95))
                 .cornerRadius(16)
             
-            // Background grid
-            ForEach(0..<6, id: \.self) { i in
+            // Campus buildings and roads (Apple Maps style)
+            VStack(spacing: 0) {
+                // Campus area (green spaces)
                 Rectangle()
-                    .fill(Color.gray.opacity(0.1))
-                    .frame(width: 1, height: 100)
-                    .offset(x: Double(i * 25 - 62))
+                    .fill(Color(red: 0.7, green: 0.9, blue: 0.7))
+                    .frame(height: 40)
+                
+                // Urban area
+                Rectangle()
+                    .fill(Color(red: 0.9, green: 0.9, blue: 0.9))
+                    .frame(height: 60)
             }
             
-            ForEach(0..<5, id: \.self) { i in
-                Rectangle()
-                    .fill(Color.gray.opacity(0.1))
-                    .frame(width: 100, height: 1)
-                    .offset(y: Double(i * 20 - 40))
+            // Roads
+            Path { path in
+                // University Avenue
+                path.move(to: CGPoint(x: -60, y: 20))
+                path.addLine(to: CGPoint(x: 60, y: 20))
+                
+                // 13th Street
+                path.move(to: CGPoint(x: -20, y: -20))
+                path.addLine(to: CGPoint(x: -20, y: 60))
             }
+            .stroke(Color.white, lineWidth: 3)
             
-            // Route trail based on ID
-            if routeID == 1 {
-                Path { path in
-                    path.move(to: CGPoint(x: -50, y: 20))
-                    path.addQuadCurve(to: CGPoint(x: -10, y: -10), control: CGPoint(x: -30, y: 5))
-                    path.addQuadCurve(to: CGPoint(x: 30, y: 10), control: CGPoint(x: 10, y: 0))
-                    path.addQuadCurve(to: CGPoint(x: 50, y: -20), control: CGPoint(x: 40, y: -5))
+            // Route trail (purple like Apple Maps)
+            Path { path in
+                path.move(to: CGPoint(x: -50, y: 15))
+                path.addQuadCurve(to: CGPoint(x: -15, y: 5), control: CGPoint(x: -32, y: 10))
+                path.addQuadCurve(to: CGPoint(x: 20, y: 15), control: CGPoint(x: 2, y: 8))
+                path.addQuadCurve(to: CGPoint(x: 50, y: 25), control: CGPoint(x: 35, y: 20))
+            }
+            .stroke(Color.purple, lineWidth: 4)
+            
+            // Apple Maps watermark
+            VStack {
+                Spacer()
+                HStack {
+                    Text("Maps")
+                        .font(.system(size: 8, weight: .medium))
+                        .foregroundColor(.gray)
+                    Spacer()
                 }
-                .stroke(Color.red, lineWidth: 3)
-            } else {
-                Path { path in
-                    path.move(to: CGPoint(x: -40, y: -15))
-                    path.addQuadCurve(to: CGPoint(x: 0, y: 25), control: CGPoint(x: -20, y: 5))
-                    path.addQuadCurve(to: CGPoint(x: 40, y: 5), control: CGPoint(x: 20, y: 15))
-                }
-                .stroke(Color.red, lineWidth: 3)
+                .padding(.horizontal, 8)
+                .padding(.bottom, 4)
             }
         }
         .frame(height: 100)
+        .cornerRadius(16)
     }
 }
 
@@ -1305,15 +1321,15 @@ struct DrivingScreen: View {
                         Text("Driving")
                             .font(.system(size: 34, weight: .bold))
                             .foregroundColor(.black)
-                        
-                        Spacer()
-                    }
+                                    
+                                    Spacer()
+                                }
                     .padding(.horizontal, 24)
                     .padding(.top, 20)
                     .padding(.bottom, 24)
-                    
+                                
                     // Large Logs Card
-                    Button(action: {
+                                Button(action: {
                         showTripLog = true
                     }) {
                         VStack(spacing: 0) {
@@ -1337,30 +1353,30 @@ struct DrivingScreen: View {
                             .background(Color.black)
                             
                             // White Content Section
-                            VStack(spacing: 20) {
-                                // First Trip - Morning Commute
-                                VStack(spacing: 16) {
+                            VStack(spacing: 0) {
+                                // Single Trip - Campus to Downtown
+                                VStack(spacing: 8) {
                                     // Trip Header
                                     HStack {
-                                        VStack(alignment: .leading, spacing: 4) {
-                                            Text("Morning Commute")
-                                                .font(.system(size: 16, weight: .semibold))
+                                        VStack(alignment: .leading, spacing: 1) {
+                                            Text("UF Campus → Downtown")
+                                                .font(.system(size: 15, weight: .semibold))
                                                 .foregroundColor(.black)
                                             
                                             Text("08:30 - 08:54 • 24 min")
-                                                .font(.system(size: 12, weight: .medium))
+                                                .font(.system(size: 11, weight: .medium))
                                                 .foregroundColor(.gray)
                                         }
                                         
                                         Spacer()
                                         
-                                        VStack(alignment: .trailing, spacing: 4) {
+                                        VStack(alignment: .trailing, spacing: 1) {
                                             Text("1.2")
-                                                .font(.system(size: 18, weight: .bold))
+                                                .font(.system(size: 16, weight: .bold))
                                                 .foregroundColor(.red)
                                             
                                             Text("kg CO₂")
-                                                .font(.system(size: 10, weight: .medium))
+                                                .font(.system(size: 9, weight: .medium))
                                                 .foregroundColor(.gray)
                                         }
                                     }
@@ -1369,158 +1385,63 @@ struct DrivingScreen: View {
                                     ZStack {
                                         MapTrailView(routeID: 1)
                                         
-                                        // Start point
+                                        // Start point (campus)
                                         Circle()
                                             .fill(Color.white)
-                                            .frame(width: 12, height: 12)
+                                            .frame(width: 8, height: 8)
                                             .overlay(
                                                 Circle()
-                                                    .stroke(Color.green, lineWidth: 3)
+                                                    .stroke(Color.purple, lineWidth: 2)
                                             )
-                                            .offset(x: -50, y: 20)
+                                            .offset(x: -50, y: 15)
                                         
-                                        // End point
+                                        // End point (downtown)
                                         Circle()
-                                            .fill(Color.white)
-                                            .frame(width: 12, height: 12)
+                                            .fill(Color.purple)
+                                            .frame(width: 8, height: 8)
                                             .overlay(
                                                 Circle()
-                                                    .stroke(Color.red, lineWidth: 3)
+                                                    .stroke(Color.white, lineWidth: 1)
                                             )
-                                            .offset(x: 50, y: -20)
+                                            .offset(x: 50, y: 25)
                                     }
                                     
                                     // Trip Stats
-                                    HStack(spacing: 20) {
-                                        VStack(spacing: 4) {
-                                            Text("8.5")
-                                                .font(.system(size: 16, weight: .bold))
+                                    HStack(spacing: 12) {
+                                        VStack(spacing: 1) {
+                                            Text("3.2")
+                                                .font(.system(size: 13, weight: .bold))
                                                 .foregroundColor(.black)
                                             
-                                            Text("km")
-                                                .font(.system(size: 10, weight: .medium))
+                                            Text("miles")
+                                                .font(.system(size: 8, weight: .medium))
                                                 .foregroundColor(.gray)
                                         }
                                         
-                                        VStack(spacing: 4) {
-                                            Text("45")
-                                                .font(.system(size: 16, weight: .bold))
+                                        VStack(spacing: 1) {
+                                            Text("35")
+                                                .font(.system(size: 13, weight: .bold))
                                                 .foregroundColor(.black)
                                             
                                             Text("mph max")
-                                                .font(.system(size: 10, weight: .medium))
+                                                .font(.system(size: 8, weight: .medium))
                                                 .foregroundColor(.gray)
                                         }
                                         
-                                        VStack(spacing: 4) {
-                                            Text("32")
-                                                .font(.system(size: 16, weight: .bold))
+                                        VStack(spacing: 1) {
+                                            Text("28")
+                                                .font(.system(size: 13, weight: .bold))
                                                 .foregroundColor(.black)
                                             
                                             Text("avg mph")
-                                                .font(.system(size: 10, weight: .medium))
+                                                .font(.system(size: 8, weight: .medium))
                                                 .foregroundColor(.gray)
                                         }
                                         
                                         Spacer()
                                     }
                                 }
-                                .padding(20)
-                                .background(Color.white)
-                                .cornerRadius(16)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 16)
-                                        .stroke(Color.gray.opacity(0.2), lineWidth: 1)
-                                )
-                                
-                                // Second Trip - Evening Return
-                                VStack(spacing: 16) {
-                                    // Trip Header
-                                    HStack {
-                                        VStack(alignment: .leading, spacing: 4) {
-                                            Text("Evening Return")
-                                                .font(.system(size: 16, weight: .semibold))
-                                                .foregroundColor(.black)
-                                            
-                                            Text("18:45 - 19:03 • 18 min")
-                                                .font(.system(size: 12, weight: .medium))
-                                                .foregroundColor(.gray)
-                                        }
-                                        
-                                        Spacer()
-                                        
-                                        VStack(alignment: .trailing, spacing: 4) {
-                                            Text("0.9")
-                                                .font(.system(size: 18, weight: .bold))
-                                                .foregroundColor(.red)
-                                            
-                                            Text("kg CO₂")
-                                                .font(.system(size: 10, weight: .medium))
-                                                .foregroundColor(.gray)
-                                        }
-                                    }
-                                    
-                                    // Map Trail
-                                    ZStack {
-                                        MapTrailView(routeID: 2)
-                                        
-                                        // Start point
-                                        Circle()
-                                            .fill(Color.white)
-                                            .frame(width: 12, height: 12)
-                                            .overlay(
-                                                Circle()
-                                                    .stroke(Color.green, lineWidth: 3)
-                                            )
-                                            .offset(x: -40, y: -15)
-                                        
-                                        // End point
-                                        Circle()
-                                            .fill(Color.white)
-                                            .frame(width: 12, height: 12)
-                                            .overlay(
-                                                Circle()
-                                                    .stroke(Color.red, lineWidth: 3)
-                                            )
-                                            .offset(x: 40, y: 5)
-                                    }
-                                    
-                                    // Trip Stats
-                                    HStack(spacing: 20) {
-                                        VStack(spacing: 4) {
-                                            Text("5.8")
-                                                .font(.system(size: 16, weight: .bold))
-                                                .foregroundColor(.black)
-                                            
-                                            Text("km")
-                                                .font(.system(size: 10, weight: .medium))
-                                                .foregroundColor(.gray)
-                                        }
-                                        
-                                        VStack(spacing: 4) {
-                                            Text("52")
-                                                .font(.system(size: 16, weight: .bold))
-                                                .foregroundColor(.black)
-                                            
-                                            Text("mph max")
-                                                .font(.system(size: 10, weight: .medium))
-                                                .foregroundColor(.gray)
-                                        }
-                                        
-                                        VStack(spacing: 4) {
-                                            Text("29")
-                                                .font(.system(size: 16, weight: .bold))
-                                                .foregroundColor(.black)
-                                            
-                                            Text("avg mph")
-                                                .font(.system(size: 10, weight: .medium))
-                                                .foregroundColor(.gray)
-                                        }
-                                        
-                                        Spacer()
-                                    }
-                                }
-                                .padding(20)
+                                .padding(12)
                                 .background(Color.white)
                                 .cornerRadius(16)
                                 .overlay(
@@ -1528,8 +1449,8 @@ struct DrivingScreen: View {
                                         .stroke(Color.gray.opacity(0.2), lineWidth: 1)
                                 )
                             }
-                            .padding(.top, 20)
-                            .padding(.bottom, 24)
+                            .padding(.top, 12)
+                            .padding(.bottom, 16)
                             .background(Color.white)
                         }
                         .cornerRadius(24)
@@ -1544,23 +1465,23 @@ struct DrivingScreen: View {
                         .frame(height: 20)
                     
                     // Today Widget - Combined Black Widget
-                    VStack(spacing: 20) {
-                        HStack {
+                                VStack(spacing: 20) {
+                                    HStack {
                             Text("Today")
                                 .font(.system(size: 18, weight: .bold))
                                 .foregroundColor(.white)
-                            
-                            Spacer()
+                                        
+                                        Spacer()
                         }
                         
                         HStack(spacing: 16) {
                             // Trips Count
                             VStack(spacing: 8) {
-                                Text("3")
+                                Text("1")
                                     .font(.system(size: 28, weight: .bold))
                                     .foregroundColor(.white)
                                 
-                                Text("Trips")
+                                Text("Trip")
                                     .font(.system(size: 12, weight: .medium))
                                     .foregroundColor(.white.opacity(0.7))
                             }
@@ -1568,7 +1489,7 @@ struct DrivingScreen: View {
                             
                             // Total Distance
                             VStack(spacing: 8) {
-                                Text("10.9")
+                                Text("3.2")
                                     .font(.system(size: 28, weight: .bold))
                                     .foregroundColor(.white)
                                 
@@ -1580,7 +1501,7 @@ struct DrivingScreen: View {
                             
                             // CO2 Emissions
                             VStack(spacing: 8) {
-                                Text("2.1")
+                                Text("1.2")
                                     .font(.system(size: 28, weight: .bold))
                                     .foregroundColor(.white)
                                 
@@ -1604,7 +1525,7 @@ struct DrivingScreen: View {
                         .frame(height: 20)
                     
                     // Automatic Tracking Widget
-                    VStack(spacing: 20) {
+                    VStack(spacing: 16) {
                         HStack {
                             Text("Automatic Tracking")
                                 .font(.system(size: 18, weight: .bold))
@@ -1620,7 +1541,8 @@ struct DrivingScreen: View {
                             .font(.system(size: 14, weight: .regular))
                             .foregroundColor(.gray)
                             .multilineTextAlignment(.leading)
-                            .lineLimit(2)
+                            .lineLimit(nil)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                     .padding(24)
                     .background(Color.white)
@@ -1731,7 +1653,7 @@ struct TripLogView: View {
                             HStack(spacing: 16) {
                                 VStack(spacing: 8) {
                                     Text("3")
-                                        .font(.system(size: 24, weight: .bold))
+                                            .font(.system(size: 24, weight: .bold))
                                         .foregroundColor(.red)
                                     
                                     Text("Trips Today")
@@ -1861,7 +1783,7 @@ struct TripRow: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("\(trip.startTime) - \(trip.endTime)")
                         .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(.black)
+                                            .foregroundColor(.black)
                     
                     Text(String(format: "%.1f km • Max: %.0f mph", trip.distance, trip.maxSpeed))
                         .font(.system(size: 12, weight: .medium))
@@ -1877,13 +1799,13 @@ struct TripRow: View {
                     
                     Text("kg CO₂")
                         .font(.system(size: 10, weight: .medium))
-                        .foregroundColor(.gray)
+                                        .foregroundColor(.gray)
                 }
             }
-            
+                                    
             // Classification Buttons
             HStack(spacing: 12) {
-                Button(action: {
+                                    Button(action: {
                     trip.transportMode = .car
                 }) {
                     Text("Car")
@@ -1912,7 +1834,7 @@ struct TripRow: View {
         }
         .padding(20)
         .background(Color.white)
-        .cornerRadius(16)
+                                            .cornerRadius(16)
         .overlay(
             RoundedRectangle(cornerRadius: 16)
                 .stroke(Color.gray.opacity(0.1), lineWidth: 1)
@@ -2058,19 +1980,19 @@ struct ScreenTimeScreen: View {
                                             }
                                         }
                                     }
-                                }
                             }
-                            .padding(24)
-                            .background(Color.white)
-                            .cornerRadius(20)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 20)
-                                    .stroke(Color(.systemGray5), lineWidth: 1)
-                            )
-                            .padding(.horizontal, 24)
                         }
-                        
-                        Spacer()
+                        .padding(24)
+                        .background(Color.white)
+                        .cornerRadius(20)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 20)
+                                .stroke(Color(.systemGray5), lineWidth: 1)
+                        )
+                        .padding(.horizontal, 24)
+                    }
+                    
+                    Spacer()
                             .frame(height: 100)
                     }
                 }
