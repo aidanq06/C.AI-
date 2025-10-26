@@ -62,34 +62,33 @@ struct SplashScreen: View {
             VStack(spacing: 0) {
                 Spacer()
                 
-                // Placeholder logo - easily replaceable
-                ZStack {
-                    Circle()
-                        .fill(Color.black)
-                        .frame(width: 120, height: 120)
-                    
-                    Text("🌱")
-                        .font(.system(size: 60))
-                }
-                .scaleEffect(animate ? 1.0 : 0.8)
-                .opacity(animate ? 1.0 : 0.8)
+                // Your Logo
+                Image("AppLogo")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 200, height: 200)
+                    .scaleEffect(animate ? 1.0 : 0.8)
+                    .opacity(animate ? 1.0 : 0.8)
                 
                 Text("C.AI₂")
-                    .font(.system(size: 48, weight: .bold, design: .default))
+                    .font(.system(size: 44, weight: .bold, design: .default))
                     .foregroundColor(.black)
                     .padding(.top, 24)
                 
                 Spacer()
                 
-                Text("curated by")
-                    .font(.system(size: 14, weight: .regular))
-                    .foregroundColor(.gray)
-                
-                Text("Your Team")
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(.black)
-                    .padding(.top, 4)
-                    .padding(.bottom, 50)
+                // Swipe Instruction
+                VStack(spacing: 12) {
+                    Image(systemName: "arrow.right.circle.fill")
+                        .font(.system(size: 32))
+                        .foregroundColor(.black.opacity(0.6))
+                        .symbolEffect(.bounce, value: animate)
+                    
+                    Text("Swipe to continue")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(.gray)
+                }
+                .padding(.bottom, 60)
             }
         }
         .onAppear {
@@ -158,17 +157,30 @@ struct FeatureShowcase1: View {
                 Spacer()
                     .frame(height: 60)
                 
-                Text("Carbon tracking")
-                    .font(.system(size: 34, weight: .bold))
-                    .foregroundColor(.black)
-                
-                Text("made easy")
-                    .font(.system(size: 34, weight: .bold))
-                    .foregroundColor(.black)
-                    .padding(.top, 4)
+                VStack(spacing: 16) {
+                    Text("Carbon tracking")
+                        .font(.system(size: 32, weight: .bold))
+                        .foregroundColor(.black)
+                    
+                    Text("made easy")
+                        .font(.system(size: 32, weight: .bold))
+                        .foregroundColor(.black)
+                }
                 
                 Spacer()
-                    .frame(height: 100)
+                    .frame(height: 40)
+                
+                // Swipe Indicator
+                Image(systemName: "arrow.right.circle.fill")
+                    .font(.system(size: 28))
+                    .foregroundColor(.black.opacity(0.3))
+                
+                Text("Swipe to continue")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(.gray)
+                
+                Spacer()
+                    .frame(height: 40)
             }
         }
     }
@@ -189,14 +201,15 @@ struct FeatureShowcase2: View {
                 Spacer()
                     .frame(height: 100)
                 
-                Text("Track your")
-                    .font(.system(size: 38, weight: .bold))
-                    .foregroundColor(.black)
-                
-                Text("daily footprint")
-                    .font(.system(size: 38, weight: .bold))
-                    .foregroundColor(.black)
-                    .padding(.top, 4)
+                VStack(spacing: 8) {
+                    Text("Track your")
+                        .font(.system(size: 32, weight: .bold))
+                        .foregroundColor(.black)
+                    
+                    Text("daily footprint")
+                        .font(.system(size: 32, weight: .bold))
+                        .foregroundColor(.black)
+                }
                 
                 Spacer()
                     .frame(height: 60)
@@ -241,15 +254,27 @@ struct FeatureShowcase2: View {
                 
                 Spacer()
                 
-                Text("Snap photos, track miles,")
-                    .font(.system(size: 16, weight: .regular))
-                    .foregroundColor(.gray)
-                
-                Text("reduce your impact")
-                    .font(.system(size: 16, weight: .regular))
-                    .foregroundColor(.gray)
-                    .padding(.top, 4)
-                    .padding(.bottom, 80)
+                VStack(spacing: 12) {
+                    VStack(spacing: 4) {
+                        Text("Snap photos, track miles,")
+                            .font(.system(size: 14, weight: .regular))
+                            .foregroundColor(.gray)
+                        
+                        Text("reduce your impact")
+                            .font(.system(size: 14, weight: .regular))
+                            .foregroundColor(.gray)
+                    }
+                    
+                    // Swipe Indicator
+                    Image(systemName: "arrow.right.circle.fill")
+                        .font(.system(size: 28))
+                        .foregroundColor(.black.opacity(0.3))
+                    
+                    Text("Swipe to continue")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundColor(.gray)
+                }
+                .padding(.bottom, 60)
             }
             .padding(.horizontal, 24)
         }
@@ -269,17 +294,13 @@ struct SignInScreen: View {
                 Spacer()
                 
                 // Logo
-                ZStack {
-                    Circle()
-                        .fill(Color.black)
-                        .frame(width: 100, height: 100)
-                    
-                    Text("🌱")
-                        .font(.system(size: 50))
-                }
+                Image("AppLogo")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 150, height: 150)
                 
                 Text("C.AI₂")
-                    .font(.system(size: 42, weight: .bold))
+                    .font(.system(size: 38, weight: .bold))
                     .foregroundColor(.black)
                     .padding(.top, 20)
                 
@@ -349,12 +370,21 @@ struct SignInScreen: View {
                     // Placeholder action
                     hasCompletedOnboarding = true
                 }) {
-                    Text("Already have an account? Sign In")
-                        .font(.system(size: 15, weight: .regular))
-                        .foregroundColor(.gray)
-                }
-                .padding(.top, 32)
-                .padding(.bottom, 50)
+                    Text("Get started")
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundColor(.black)
+                        .padding(.top, 32)
+                        .padding(.bottom, 12)
+                        
+                        // Swipe Indicator
+                        Image(systemName: "hand.tap.fill")
+                            .font(.system(size: 24))
+                            .foregroundColor(.black.opacity(0.3))
+                        
+                        Text("Tap any button to continue")
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundColor(.gray)
+                            .padding(.bottom, 32)
             }
         }
     }
@@ -1291,7 +1321,7 @@ struct MapTrailView: View {
                     Text("Maps")
                         .font(.system(size: 8, weight: .medium))
                         .foregroundColor(.gray)
-                    Spacer()
+                                            Spacer()
                 }
                 .padding(.horizontal, 8)
                 .padding(.bottom, 4)
@@ -1443,7 +1473,7 @@ struct DrivingScreen: View {
                                 }
                                 .padding(12)
                                 .background(Color.white)
-                                .cornerRadius(16)
+                                        .cornerRadius(16)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 16)
                                         .stroke(Color.gray.opacity(0.2), lineWidth: 1)
@@ -1848,6 +1878,7 @@ struct ScreenTimeScreen: View {
     @State private var estimatedCO2: Double = 0.0
     @State private var topApps: [(String, Double)] = []
     @State private var isAnalyzing = true
+    @State private var showAppBreakdown = false
     
     var body: some View {
         NavigationView {
@@ -1920,75 +1951,83 @@ struct ScreenTimeScreen: View {
                                     }
                                     
                                     Spacer()
-                                }
                             }
-                            .padding(24)
+                        }
+                        .padding(24)
                             .background(Color.black)
                             .cornerRadius(24)
                             .padding(.horizontal, 24)
                             .padding(.bottom, 24)
                             
-                            // Screen Time Stats
-                            VStack(spacing: 20) {
-                                HStack {
-                                    Text("Usage Breakdown")
-                                        .font(.system(size: 20, weight: .bold))
-                                        .foregroundColor(.black)
-                                    
-                                    Spacer()
-                                }
-                                
-                                VStack(spacing: 16) {
-                                    // Total Screen Time
+                            // Usage Breakdown Card - Clickable
+                            Button(action: {
+                                showAppBreakdown = true
+                            }) {
+                                VStack(spacing: 24) {
                                     HStack {
-                                        VStack(alignment: .leading, spacing: 4) {
-                                            Text("Total Screen Time")
-                                                .font(.system(size: 16, weight: .medium))
-                                                .foregroundColor(.black)
-                                            
-                                            Text(String(format: "%.1f hours", totalScreenTime))
-                                                .font(.system(size: 24, weight: .bold))
-                                                .foregroundColor(.blue)
-                                        }
+                                        Text("Usage Breakdown")
+                                            .font(.system(size: 20, weight: .bold))
+                                            .foregroundColor(.black)
                                         
                                         Spacer()
                                         
-                                        Image(systemName: "clock.fill")
-                                            .font(.system(size: 24))
-                                            .foregroundColor(.blue)
+                                        Text("View Details")
+                                            .font(.system(size: 14, weight: .medium))
+                                            .foregroundColor(.gray)
                                     }
                                     
-                                    Divider()
-                                    
-                                    // Top Apps
-                                    VStack(alignment: .leading, spacing: 12) {
-                                        Text("Top Apps")
-                                            .font(.system(size: 16, weight: .medium))
-                                            .foregroundColor(.black)
-                                        
-                                        ForEach(topApps.prefix(3), id: \.0) { app in
-                                            HStack {
-                                                Text(app.0)
-                                                    .font(.system(size: 14, weight: .regular))
-                                                    .foregroundColor(.gray)
-                                                
-                                                Spacer()
-                                                
-                                                Text(String(format: "%.1fh", app.1))
-                                                    .font(.system(size: 14, weight: .medium))
+                                    VStack(spacing: 20) {
+                                        // Total Screen Time
+                                        HStack {
+                                            VStack(alignment: .leading, spacing: 6) {
+                                                Text("Total Screen Time")
+                                                    .font(.system(size: 16, weight: .medium))
                                                     .foregroundColor(.black)
+                                                
+                                                Text(String(format: "%.1f hours", totalScreenTime))
+                                                    .font(.system(size: 28, weight: .bold))
+                                                    .foregroundColor(.blue)
+                                            }
+                                            
+                                            Spacer()
+                                            
+                                            Image(systemName: "clock.fill")
+                                                .font(.system(size: 28))
+                                                .foregroundColor(.blue)
+                                        }
+                                        
+                                        Divider()
+                                        
+                                        // Top Apps Preview
+                                        VStack(alignment: .leading, spacing: 16) {
+                                            Text("Top Apps")
+                                                .font(.system(size: 16, weight: .medium))
+                                                .foregroundColor(.black)
+                                            
+                                            ForEach(topApps.prefix(3), id: \.0) { app in
+                                                HStack {
+                                                    Text(app.0)
+                                                        .font(.system(size: 14, weight: .regular))
+                                                        .foregroundColor(.gray)
+                                                    
+                                                    Spacer()
+                                                    
+                                                    Text(String(format: "%.1fh", app.1))
+                                                        .font(.system(size: 14, weight: .medium))
+                                                        .foregroundColor(.black)
+                                                }
                                             }
                                         }
                                     }
-                            }
-                        }
-                        .padding(24)
+                                }
+                                .padding(28)
                         .background(Color.white)
                         .cornerRadius(20)
                         .overlay(
                             RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color(.systemGray5), lineWidth: 1)
+                                        .stroke(Color.black, lineWidth: 2)
                         )
+                            }
                         .padding(.horizontal, 24)
                     }
                     
@@ -1998,6 +2037,9 @@ struct ScreenTimeScreen: View {
                 }
             }
             .navigationBarHidden(true)
+        }
+        .sheet(isPresented: $showAppBreakdown) {
+            AppCarbonBreakdownView(isPresented: $showAppBreakdown)
         }
         .onAppear {
             analyzeScreenTime()
@@ -2020,6 +2062,262 @@ struct ScreenTimeScreen: View {
             
             isAnalyzing = false
         }
+    }
+}
+
+// MARK: - App Carbon Breakdown View
+struct AppCarbonBreakdownView: View {
+    @Binding var isPresented: Bool
+    @State private var apps: [AppCarbonData] = []
+    
+    var body: some View {
+        NavigationView {
+            ZStack {
+                Color.white
+                    .ignoresSafeArea()
+                
+                ScrollView {
+                    VStack(spacing: 0) {
+                        // Header
+                        HStack {
+                            Text("App Carbon Impact")
+                                .font(.system(size: 28, weight: .bold))
+                                .foregroundColor(.black)
+                            
+                            Spacer()
+                        }
+                        .padding(.horizontal, 24)
+                        .padding(.top, 20)
+                        .padding(.bottom, 24)
+                        
+                        // Summary Card
+                        VStack(spacing: 20) {
+                            HStack {
+                                Text("Today's Impact")
+                                    .font(.system(size: 18, weight: .bold))
+                                    .foregroundColor(.black)
+                                
+                                Spacer()
+                                
+                                Text("0.24 kg CO₂")
+                                    .font(.system(size: 18, weight: .bold))
+                                    .foregroundColor(.blue)
+                            }
+                            
+                            Text("Based on app usage patterns and server energy consumption")
+                                .font(.system(size: 14, weight: .regular))
+                                .foregroundColor(.gray)
+                                .multilineTextAlignment(.leading)
+                                .lineLimit(nil)
+                        }
+                        .padding(24)
+                        .background(Color.white)
+                        .cornerRadius(20)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 20)
+                                .stroke(Color.black, lineWidth: 2)
+                        )
+                        .padding(.horizontal, 24)
+                        .padding(.bottom, 24)
+                        
+                        // Apps List
+                        LazyVStack(spacing: 12) {
+                            ForEach(apps) { app in
+                                AppCarbonRow(app: app)
+                            }
+                        }
+                        .padding(.horizontal, 24)
+                    
+                    Spacer()
+                            .frame(height: 100)
+                    }
+                }
+            }
+            .navigationBarHidden(true)
+        }
+        .overlay(
+            VStack {
+                HStack {
+                    Button("Done") {
+                        isPresented = false
+                    }
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.blue)
+                    
+                    Spacer()
+                }
+                .padding(.horizontal, 24)
+                .padding(.top, 20)
+                
+                Spacer()
+            }
+        )
+        .onAppear {
+            loadAppData()
+        }
+    }
+    
+    private func loadAppData() {
+        apps = [
+            AppCarbonData(
+                id: UUID(),
+                name: "Safari",
+                usageHours: 1.8,
+                carbonImpact: 0.045,
+                category: "Web Browsing",
+                efficiency: .medium
+            ),
+            AppCarbonData(
+                id: UUID(),
+                name: "Instagram",
+                usageHours: 1.2,
+                carbonImpact: 0.036,
+                category: "Social Media",
+                efficiency: .low
+            ),
+            AppCarbonData(
+                id: UUID(),
+                name: "Messages",
+                usageHours: 0.9,
+                carbonImpact: 0.018,
+                category: "Communication",
+                efficiency: .high
+            ),
+            AppCarbonData(
+                id: UUID(),
+                name: "YouTube",
+                usageHours: 0.7,
+                carbonImpact: 0.042,
+                category: "Video Streaming",
+                efficiency: .low
+            ),
+            AppCarbonData(
+                id: UUID(),
+                name: "Mail",
+                usageHours: 0.5,
+                carbonImpact: 0.015,
+                category: "Communication",
+                efficiency: .high
+            ),
+            AppCarbonData(
+                id: UUID(),
+                name: "Spotify",
+                usageHours: 0.4,
+                carbonImpact: 0.012,
+                category: "Music Streaming",
+                efficiency: .medium
+            ),
+            AppCarbonData(
+                id: UUID(),
+                name: "Maps",
+                usageHours: 0.3,
+                carbonImpact: 0.009,
+                category: "Navigation",
+                efficiency: .high
+            ),
+            AppCarbonData(
+                id: UUID(),
+                name: "Photos",
+                usageHours: 0.2,
+                carbonImpact: 0.006,
+                category: "Media",
+                efficiency: .high
+            )
+        ].sorted { $0.carbonImpact > $1.carbonImpact }
+    }
+}
+
+struct AppCarbonData: Identifiable {
+    let id: UUID
+    let name: String
+    let usageHours: Double
+    let carbonImpact: Double
+    let category: String
+    let efficiency: CarbonEfficiency
+}
+
+enum CarbonEfficiency {
+    case high, medium, low
+    
+    var color: Color {
+        switch self {
+        case .high: return .green
+        case .medium: return .orange
+        case .low: return .red
+        }
+    }
+    
+    var description: String {
+        switch self {
+        case .high: return "Efficient"
+        case .medium: return "Moderate"
+        case .low: return "High Impact"
+        }
+    }
+}
+
+struct AppCarbonRow: View {
+    let app: AppCarbonData
+    
+    var body: some View {
+        VStack(spacing: 16) {
+            // App Header
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(app.name)
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(.black)
+                    
+                    Text(app.category)
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundColor(.gray)
+                }
+                
+                Spacer()
+                
+                VStack(alignment: .trailing, spacing: 4) {
+                    Text(String(format: "%.3f", app.carbonImpact))
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(.blue)
+                    
+                    Text("kg CO₂")
+                        .font(.system(size: 10, weight: .medium))
+                        .foregroundColor(.gray)
+                }
+            }
+            
+            // Usage Stats
+            HStack(spacing: 20) {
+                VStack(spacing: 4) {
+                    Text(String(format: "%.1f", app.usageHours))
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundColor(.black)
+                    
+                    Text("hours")
+                        .font(.system(size: 10, weight: .medium))
+                        .foregroundColor(.gray)
+                }
+                
+                VStack(spacing: 4) {
+                    Text(app.efficiency.description)
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundColor(app.efficiency.color)
+                    
+                    Text("efficiency")
+                        .font(.system(size: 10, weight: .medium))
+                        .foregroundColor(.gray)
+                }
+                
+                Spacer()
+            }
+        }
+        .padding(20)
+        .background(Color.white)
+        .cornerRadius(16)
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(Color.gray.opacity(0.2), lineWidth: 1)
+        )
     }
 }
 
