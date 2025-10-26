@@ -40,6 +40,11 @@ The goal is simple: show people their environmental impact in real numbers, then
 <img width="200" height="500" alt="IMG_2591" src="https://github.com/user-attachments/assets/6477087f-7231-4738-8acf-e051ad25fa4f" />
 
 
+### CO2 log - Here we can see every item we added. The food items we added, the driving, and our screentime.
+<img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/bb13bdc3-09dc-4bb4-a848-0dc6a3589b27" />
+
+
+
 
 ### Get personalized tips - Based on your actual usage, the app suggests concrete ways to reduce your footprint. Want to cut 2 kg of CO₂ today? Here's how.
 
