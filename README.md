@@ -37,7 +37,11 @@ The goal is simple: show people their environmental impact in real numbers, then
 
 
 
-**Get personalized tips** - Based on your actual usage, the app suggests concrete ways to reduce your footprint. Want to cut 2 kg of CO₂ today? Here's how.
+### Get personalized tips - Based on your actual usage, the app suggests concrete ways to reduce your footprint. Want to cut 2 kg of CO₂ today? Here's how.
+
+<img width="200" height="500" alt="IMG_2594" src="https://github.com/user-attachments/assets/768f6ad2-e613-40db-a920-186ae97c4d1f" />
+<img width="200" height="500" alt="IMG_2593" src="https://github.com/user-attachments/assets/43340fd5-311a-4e45-b94d-120df641b889" />
+<img width="200" height="500" alt="IMG_2592" src="https://github.com/user-attachments/assets/e44fb152-e001-447c-a9da-00c58c605481" />
 
 ## Technical approach
 
