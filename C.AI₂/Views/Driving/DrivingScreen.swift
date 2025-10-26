@@ -9,9 +9,12 @@ import SwiftUI
 
 struct DrivingScreen: View {
     @StateObject private var locationManager = LocationManager()
+    @StateObject private var carbonManager = CarbonFootprintManager.shared
     @State private var showTripLog = false
     @State private var trips: [DetectedTrip] = []
     @State private var isTrackingEnabled = true
+    @State private var showAddToTotal = false
+    @State private var showHelp = false
     
     var body: some View {
         NavigationView {
@@ -25,15 +28,24 @@ struct DrivingScreen: View {
                         Text("Driving")
                             .font(.system(size: 34, weight: .bold))
                             .foregroundColor(.black)
-                                    
-                                    Spacer()
-                                }
+
+                        Spacer()
+
+                        // Help Button
+                        Button(action: {
+                            showHelp = true
+                        }) {
+                            Image(systemName: "questionmark.circle")
+                                .font(.system(size: 20, weight: .regular))
+                                .foregroundColor(.gray)
+                        }
+                    }
                     .padding(.horizontal, 24)
                     .padding(.top, 20)
                     .padding(.bottom, 24)
                                 
-                    // Large Logs Card
-                                Button(action: {
+                    // Trip Logs Card
+                    Button(action: {
                         showTripLog = true
                     }) {
                         VStack(spacing: 0) {
@@ -43,9 +55,9 @@ struct DrivingScreen: View {
                                     Text("Trip Logs")
                                         .font(.system(size: 20, weight: .bold))
                                         .foregroundColor(.white)
-                                    
+
                                     Spacer()
-                                    
+
                                     Text("View All")
                                         .font(.system(size: 14, weight: .medium))
                                         .foregroundColor(.white.opacity(0.7))
@@ -55,99 +67,73 @@ struct DrivingScreen: View {
                                 .padding(.bottom, 20)
                             }
                             .background(Color.black)
-                            
-                            // White Content Section
+
+                            // White Content Section - Clean Trip Preview
                             VStack(spacing: 0) {
-                                // Single Trip - Campus to Downtown
-                                VStack(spacing: 8) {
-                                    // Trip Header
+                                VStack(spacing: 16) {
+                                    // Trip Info
                                     HStack {
-                                        VStack(alignment: .leading, spacing: 1) {
+                                        VStack(alignment: .leading, spacing: 4) {
                                             Text("UF Campus → Downtown")
-                                                .font(.system(size: 15, weight: .semibold))
+                                                .font(.system(size: 16, weight: .semibold))
                                                 .foregroundColor(.black)
-                                            
+
                                             Text("08:30 - 08:54 • 24 min")
-                                                .font(.system(size: 11, weight: .medium))
+                                                .font(.system(size: 12, weight: .medium))
                                                 .foregroundColor(.gray)
                                         }
-                                        
+
                                         Spacer()
-                                        
-                                        VStack(alignment: .trailing, spacing: 1) {
+
+                                        VStack(alignment: .trailing, spacing: 2) {
                                             Text("1.2")
-                                                .font(.system(size: 16, weight: .bold))
+                                                .font(.system(size: 18, weight: .bold))
                                                 .foregroundColor(.red)
-                                            
+
                                             Text("kg CO₂")
-                                                .font(.system(size: 9, weight: .medium))
+                                                .font(.system(size: 10, weight: .medium))
                                                 .foregroundColor(.gray)
                                         }
                                     }
-                                    
-                                    // Map Trail
-                                    ZStack {
-                                        MapTrailView(routeID: 1)
-                                        
-                                        // Start point (campus)
-                                        Circle()
-                                            .fill(Color.white)
-                                            .frame(width: 8, height: 8)
-                                            .overlay(
-                                                Circle()
-                                                    .stroke(Color.purple, lineWidth: 2)
-                                            )
-                                            .offset(x: -50, y: 15)
-                                        
-                                        // End point (downtown)
-                                        Circle()
-                                            .fill(Color.purple)
-                                            .frame(width: 8, height: 8)
-                                            .overlay(
-                                                Circle()
-                                                    .stroke(Color.white, lineWidth: 1)
-                                            )
-                                            .offset(x: 50, y: 25)
-                                    }
-                                    
-                                    // Trip Stats
-                                    HStack(spacing: 12) {
-                                        VStack(spacing: 1) {
+
+                                    // Trip Stats Row
+                                    HStack(spacing: 16) {
+                                        VStack(spacing: 2) {
                                             Text("3.2")
-                                                .font(.system(size: 13, weight: .bold))
+                                                .font(.system(size: 14, weight: .bold))
                                                 .foregroundColor(.black)
-                                            
+
                                             Text("miles")
-                                                .font(.system(size: 8, weight: .medium))
+                                                .font(.system(size: 10, weight: .medium))
                                                 .foregroundColor(.gray)
                                         }
-                                        
-                                        VStack(spacing: 1) {
+
+                                        VStack(spacing: 2) {
                                             Text("35")
-                                                .font(.system(size: 13, weight: .bold))
+                                                .font(.system(size: 14, weight: .bold))
                                                 .foregroundColor(.black)
-                                            
+
                                             Text("mph max")
-                                                .font(.system(size: 8, weight: .medium))
+                                                .font(.system(size: 10, weight: .medium))
                                                 .foregroundColor(.gray)
                                         }
-                                        
-                                        VStack(spacing: 1) {
+
+                                        VStack(spacing: 2) {
                                             Text("28")
-                                                .font(.system(size: 13, weight: .bold))
+                                                .font(.system(size: 14, weight: .bold))
                                                 .foregroundColor(.black)
-                                            
+
                                             Text("avg mph")
-                                                .font(.system(size: 8, weight: .medium))
+                                                .font(.system(size: 10, weight: .medium))
                                                 .foregroundColor(.gray)
                                         }
-                                        
+
                                         Spacer()
                                     }
                                 }
-                                .padding(12)
+                                .padding(20)
                                 .background(Color.white)
-                                        .cornerRadius(16)
+                                .cornerRadius(16)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 16)
                                         .stroke(Color.gray.opacity(0.2), lineWidth: 1)
@@ -224,10 +210,26 @@ struct DrivingScreen: View {
                             .stroke(Color.black, lineWidth: 2)
                     )
                     .padding(.horizontal, 24)
-                    
+                    .padding(.bottom, 24)
+
+                    // Add Trips to Daily Total Button
+                    Button(action: {
+                        showAddToTotal = true
+                    }) {
+                        Text("Add Trips to Daily Total")
+                            .font(.system(size: 17, weight: .semibold))
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 56)
+                            .background(Color.black)
+                            .cornerRadius(16)
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 24)
+
                     Spacer()
                         .frame(height: 20)
-                    
+
                     // Automatic Tracking Widget
                     VStack(spacing: 16) {
                         HStack {
@@ -265,8 +267,29 @@ struct DrivingScreen: View {
         .sheet(isPresented: $showTripLog) {
             TripLogView(isPresented: $showTripLog)
         }
+        .sheet(isPresented: $showHelp) {
+            HelpView(isPresented: $showHelp, currentScreen: "Driving")
+        }
         .onAppear {
             loadDemoTrips()
+        }
+        .alert("Added to Daily Total", isPresented: $showAddToTotal) {
+            Button("OK") {
+                // Add each trip to carbon manager
+                for trip in trips where trip.co2Emissions > 0 {
+                    let routeDescription = trip.distance > 0 ? "\(String(format: "%.1f", trip.distance)) km drive" : "Trip"
+                    carbonManager.addCarbonEntry(
+                        trip.co2Emissions,
+                        itemName: routeDescription,
+                        icon: "car.fill",
+                        iconColor: .blue,
+                        subtitle: "\(trip.startTime) - \(trip.endTime)"
+                    )
+                }
+            }
+        } message: {
+            let totalCO2 = trips.compactMap { $0.co2Emissions }.reduce(0, +)
+            Text("\(trips.filter { $0.co2Emissions > 0 }.count) trips (\(String(format: "%.2f", totalCO2)) kg CO₂e) have been added to your daily carbon footprint.")
         }
     }
     
@@ -309,78 +332,22 @@ struct DrivingScreen: View {
     }
 }
 
-struct MapTrailView: View {
-    let routeID: Int
-    
-    var body: some View {
-        ZStack {
-            // Apple Maps style background
-            Rectangle()
-                .fill(Color(red: 0.95, green: 0.95, blue: 0.95))
-                .cornerRadius(16)
-            
-            // Campus buildings and roads (Apple Maps style)
-            VStack(spacing: 0) {
-                // Campus area (green spaces)
-                Rectangle()
-                    .fill(Color(red: 0.7, green: 0.9, blue: 0.7))
-                    .frame(height: 40)
-                
-                // Urban area
-                Rectangle()
-                    .fill(Color(red: 0.9, green: 0.9, blue: 0.9))
-                    .frame(height: 60)
-            }
-            
-            // Roads
-            Path { path in
-                // University Avenue
-                path.move(to: CGPoint(x: -60, y: 20))
-                path.addLine(to: CGPoint(x: 60, y: 20))
-                
-                // 13th Street
-                path.move(to: CGPoint(x: -20, y: -20))
-                path.addLine(to: CGPoint(x: -20, y: 60))
-            }
-            .stroke(Color.white, lineWidth: 3)
-            
-            // Route trail (purple like Apple Maps)
-            Path { path in
-                path.move(to: CGPoint(x: -50, y: 15))
-                path.addQuadCurve(to: CGPoint(x: -15, y: 5), control: CGPoint(x: -32, y: 10))
-                path.addQuadCurve(to: CGPoint(x: 20, y: 15), control: CGPoint(x: 2, y: 8))
-                path.addQuadCurve(to: CGPoint(x: 50, y: 25), control: CGPoint(x: 35, y: 20))
-            }
-            .stroke(Color.purple, lineWidth: 4)
-            
-            // Apple Maps watermark
-            VStack {
-                Spacer()
-                HStack {
-                    Text("Maps")
-                        .font(.system(size: 8, weight: .medium))
-                        .foregroundColor(.gray)
-                                            Spacer()
-                }
-                .padding(.horizontal, 8)
-                .padding(.bottom, 4)
-            }
-        }
-        .frame(height: 100)
-        .cornerRadius(16)
-    }
-}
 
 struct TripLogView: View {
     @Binding var isPresented: Bool
     @State private var trips: [DetectedTrip] = []
-    
+
+    // Calculate totals from trips data
+    private var totalTrips: Int { trips.count }
+    private var totalDistance: Double { trips.compactMap { $0.distance }.reduce(0, +) }
+    private var totalCO2: Double { trips.compactMap { $0.co2Emissions }.reduce(0, +) }
+
     var body: some View {
         NavigationView {
             ZStack {
                 Color.white
                     .ignoresSafeArea()
-                
+
                 ScrollView {
                     VStack(spacing: 0) {
                         // Header
@@ -388,21 +355,21 @@ struct TripLogView: View {
                             Text("Trip Log")
                                 .font(.system(size: 28, weight: .bold))
                                 .foregroundColor(.black)
-                            
+
                             Spacer()
                         }
                         .padding(.horizontal, 24)
                         .padding(.top, 20)
                         .padding(.bottom, 24)
-                        
+
                         // Summary Stats
                         VStack(spacing: 16) {
                             HStack(spacing: 16) {
                                 VStack(spacing: 8) {
-                                    Text("3")
-                                            .font(.system(size: 24, weight: .bold))
+                                    Text("\(totalTrips)")
+                                        .font(.system(size: 24, weight: .bold))
                                         .foregroundColor(.red)
-                                    
+
                                     Text("Trips Today")
                                         .font(.system(size: 12, weight: .medium))
                                         .foregroundColor(.gray)
@@ -411,13 +378,13 @@ struct TripLogView: View {
                                 .padding(.vertical, 16)
                                 .background(Color.gray.opacity(0.05))
                                 .cornerRadius(12)
-                                
+
                                 VStack(spacing: 8) {
-                                    Text("17.5")
+                                    Text(String(format: "%.1f", totalDistance))
                                         .font(.system(size: 24, weight: .bold))
                                         .foregroundColor(.red)
-                                    
-                                    Text("Total km")
+
+                                    Text("Total miles")
                                         .font(.system(size: 12, weight: .medium))
                                         .foregroundColor(.gray)
                                 }
@@ -425,12 +392,12 @@ struct TripLogView: View {
                                 .padding(.vertical, 16)
                                 .background(Color.gray.opacity(0.05))
                                 .cornerRadius(12)
-                                
+
                                 VStack(spacing: 8) {
-                                    Text("2.1")
+                                    Text(String(format: "%.1f", totalCO2))
                                         .font(.system(size: 24, weight: .bold))
                                         .foregroundColor(.red)
-                                    
+
                                     Text("kg CO₂")
                                         .font(.system(size: 12, weight: .medium))
                                         .foregroundColor(.gray)
@@ -443,7 +410,7 @@ struct TripLogView: View {
                         }
                         .padding(.horizontal, 24)
                         .padding(.bottom, 24)
-                        
+
                         // Trips List
                         LazyVStack(spacing: 12) {
                             ForEach(trips) { trip in
@@ -451,7 +418,7 @@ struct TripLogView: View {
                             }
                         }
                         .padding(.horizontal, 24)
-                        
+
                         Spacer()
                             .frame(height: 100)
                     }
@@ -467,12 +434,12 @@ struct TripLogView: View {
                     }
                     .font(.system(size: 16, weight: .medium))
                     .foregroundColor(.red)
-                    
+
                     Spacer()
                 }
                 .padding(.horizontal, 24)
                 .padding(.top, 20)
-                
+
                 Spacer()
             }
         )
@@ -480,7 +447,7 @@ struct TripLogView: View {
             loadDemoTrips()
         }
     }
-    
+
     private func loadDemoTrips() {
         trips = [
             DetectedTrip(
@@ -488,104 +455,127 @@ struct TripLogView: View {
                 date: Date(),
                 startTime: "08:30",
                 endTime: "08:54",
-                distance: 8.5,
+                distance: 3.2,
                 maxSpeed: 45.0,
                 averageSpeed: 32.0,
-                transportMode: .unclassified,
+                transportMode: .car,
                 co2Emissions: 1.2
             ),
             DetectedTrip(
                 id: UUID(),
-                date: Calendar.current.date(byAdding: .hour, value: -3, to: Date()) ?? Date(),
+                date: Calendar.current.date(byAdding: .hour, value: -2, to: Date()) ?? Date(),
                 startTime: "12:15",
                 endTime: "12:27",
-                distance: 3.2,
+                distance: 1.8,
                 maxSpeed: 28.0,
-                averageSpeed: 16.0,
-                transportMode: .unclassified,
-                co2Emissions: 0.0
+                averageSpeed: 18.0,
+                transportMode: .car,
+                co2Emissions: 0.7
+            ),
+            DetectedTrip(
+                id: UUID(),
+                date: Calendar.current.date(byAdding: .hour, value: -4, to: Date()) ?? Date(),
+                startTime: "15:20",
+                endTime: "15:35",
+                distance: 2.4,
+                maxSpeed: 35.0,
+                averageSpeed: 24.0,
+                transportMode: .car,
+                co2Emissions: 0.9
             ),
             DetectedTrip(
                 id: UUID(),
                 date: Calendar.current.date(byAdding: .hour, value: -6, to: Date()) ?? Date(),
                 startTime: "18:45",
                 endTime: "19:03",
-                distance: 5.8,
+                distance: 4.1,
                 maxSpeed: 52.0,
-                averageSpeed: 29.0,
-                transportMode: .unclassified,
-                co2Emissions: 0.9
+                averageSpeed: 31.0,
+                transportMode: .car,
+                co2Emissions: 1.5
             )
         ]
     }
 }
 
 struct TripRow: View {
-    @State var trip: DetectedTrip
-    
+    let trip: DetectedTrip
+
     var body: some View {
         VStack(spacing: 16) {
             // Trip Header
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("\(trip.startTime) - \(trip.endTime)")
+                    Text("UF Campus → Downtown")
                         .font(.system(size: 16, weight: .semibold))
-                                            .foregroundColor(.black)
-                    
-                    Text(String(format: "%.1f km • Max: %.0f mph", trip.distance, trip.maxSpeed))
+                        .foregroundColor(.black)
+
+                    Text("\(trip.startTime) - \(trip.endTime) • \(calculateDuration(startTime: trip.startTime, endTime: trip.endTime))")
                         .font(.system(size: 12, weight: .medium))
                         .foregroundColor(.gray)
                 }
-                
+
                 Spacer()
-                
-                VStack(alignment: .trailing, spacing: 4) {
+
+                VStack(alignment: .trailing, spacing: 2) {
                     Text(String(format: "%.1f", trip.co2Emissions))
                         .font(.system(size: 18, weight: .bold))
-                        .foregroundColor(trip.co2Emissions > 0 ? .red : .green)
-                    
+                        .foregroundColor(.red)
+
                     Text("kg CO₂")
                         .font(.system(size: 10, weight: .medium))
-                                        .foregroundColor(.gray)
+                        .foregroundColor(.gray)
                 }
             }
-                                    
-            // Classification Buttons
-            HStack(spacing: 12) {
-                                    Button(action: {
-                    trip.transportMode = .car
-                }) {
-                    Text("Car")
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(trip.transportMode == .car ? .white : .gray)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .background(trip.transportMode == .car ? Color.red : Color.gray.opacity(0.1))
-                        .cornerRadius(8)
+
+            // Trip Stats Grid
+            HStack(spacing: 20) {
+                VStack(spacing: 4) {
+                    Text(String(format: "%.1f", trip.distance))
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundColor(.black)
+
+                    Text("miles")
+                        .font(.system(size: 10, weight: .medium))
+                        .foregroundColor(.gray)
                 }
-                
-                Button(action: {
-                    trip.transportMode = .bus
-                }) {
-                    Text("Bus")
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(trip.transportMode == .bus ? .white : .gray)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .background(trip.transportMode == .bus ? Color.red : Color.gray.opacity(0.1))
-                        .cornerRadius(8)
+
+                VStack(spacing: 4) {
+                    Text(String(format: "%.0f", trip.maxSpeed))
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundColor(.black)
+
+                    Text("mph max")
+                        .font(.system(size: 10, weight: .medium))
+                        .foregroundColor(.gray)
                 }
-                
+
+                VStack(spacing: 4) {
+                    Text(String(format: "%.0f", trip.averageSpeed))
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundColor(.black)
+
+                    Text("avg mph")
+                        .font(.system(size: 10, weight: .medium))
+                        .foregroundColor(.gray)
+                }
+
                 Spacer()
             }
         }
         .padding(20)
         .background(Color.white)
-                                            .cornerRadius(16)
+        .cornerRadius(16)
         .overlay(
             RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.gray.opacity(0.1), lineWidth: 1)
+                .stroke(Color.gray.opacity(0.2), lineWidth: 1)
         )
+    }
+
+    private func calculateDuration(startTime: String, endTime: String) -> String {
+        // Simple duration calculation - in a real app you'd parse the times properly
+        let timeComponents = ["08:30-08:54": "24 min", "12:15-12:27": "12 min", "15:20-15:35": "15 min", "18:45-19:03": "18 min"]
+        return timeComponents["\(startTime)-\(endTime)"] ?? "Unknown"
     }
 }
 

@@ -1,0 +1,18 @@
+//
+//  APIKeys.swift
+//  C.AI₂
+//
+//  Created by Aidan Quach on 10/24/25.
+//
+//  COPY THIS FILE TO APIKeys.swift AND ADD YOUR API KEYS
+//
+
+import Foundation
+
+struct APIKeys {
+    // Replace these with your actual API keys
+    // Copy this file: cp Config/APIKeys.swift.template Config/APIKeys.swift
+    static let googleVisionAPIKey = "YOUR_GOOGLE_VISION_API_KEY_HERE"
+    static let geminiAPIKey = "YOUR_GEMINI_API_KEY_HERE"
+}
+

@@ -14,6 +14,7 @@ struct HomeScreen: View {
     @State private var showCameraPermissionAlert = false
     @State private var cameraPermissionStatus: AVAuthorizationStatus = .notDetermined
     @State private var showCarbonLog = false
+    @StateObject private var carbonManager = CarbonFootprintManager.shared
     
     var body: some View {
         NavigationView {
@@ -70,7 +71,7 @@ struct HomeScreen: View {
                                     .foregroundColor(.gray)
                                 
                                 HStack(alignment: .firstTextBaseline, spacing: 6) {
-                                                Text("2.4")
+                                                Text(String(format: "%.1f", carbonManager.dailyCO2))
                                         .font(.system(size: 64, weight: .bold))
                                         .foregroundColor(.white)
                                     
@@ -99,7 +100,7 @@ struct HomeScreen: View {
                                         
                                         Spacer()
                                         
-                                        Text("2.4 / 5.0 kg")
+                                        Text(String(format: "%.1f / 5.0 kg", carbonManager.dailyCO2))
                                             .font(.system(size: 12, weight: .medium))
                                             .foregroundColor(.gray)
                                     }
@@ -108,7 +109,7 @@ struct HomeScreen: View {
                                     VStack(spacing: 8) {
                                         // Progress Bar Background
                                         GeometryReader { geometry in
-                                            let dailyUsage: Double = 2.4
+                                            let dailyUsage = carbonManager.dailyCO2
                                             let dailyMax: Double = 5.0
                                             let usagePercentage = min(dailyUsage / dailyMax, 1.0)
                                             let isOverLimit = dailyUsage > dailyMax
@@ -130,15 +131,15 @@ struct HomeScreen: View {
                                         
                                         // Status Text
                                         HStack {
-                                            Text("48% of daily limit")
+                                            Text("\(Int((carbonManager.dailyCO2 / 5.0) * 100))% of daily limit")
                                                 .font(.system(size: 11, weight: .medium))
                                                 .foregroundColor(.gray)
                                             
                                             Spacer()
                                             
-                                            Text("Good")
+                                            Text(carbonManager.dailyCO2 > 5.0 ? "Over Limit" : "Good")
                                                 .font(.system(size: 11, weight: .semibold))
-                                                .foregroundColor(.green)
+                                                .foregroundColor(carbonManager.dailyCO2 > 5.0 ? .red : .green)
                                         }
                                     }
                                 }

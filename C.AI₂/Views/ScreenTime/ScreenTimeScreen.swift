@@ -13,6 +13,9 @@ struct ScreenTimeScreen: View {
     @State private var topApps: [(String, Double)] = []
     @State private var isAnalyzing = true
     @State private var showAppBreakdown = false
+    @State private var showAddToTotal = false
+    @State private var showHelp = false
+    @StateObject private var carbonManager = CarbonFootprintManager.shared
     
     var body: some View {
         NavigationView {
@@ -27,8 +30,17 @@ struct ScreenTimeScreen: View {
                             Text("Screen Time")
                                 .font(.system(size: 34, weight: .bold))
                                 .foregroundColor(.black)
-                            
+
                             Spacer()
+
+                            // Help Button
+                            Button(action: {
+                                showHelp = true
+                            }) {
+                                Image(systemName: "questionmark.circle")
+                                    .font(.system(size: 20, weight: .regular))
+                                    .foregroundColor(.gray)
+                            }
                         }
                         .padding(.horizontal, 24)
                         .padding(.top, 20)
@@ -85,9 +97,9 @@ struct ScreenTimeScreen: View {
                                     }
                                     
                                     Spacer()
+                                }
                             }
-                        }
-                        .padding(24)
+                            .padding(24)
                             .background(Color.black)
                             .cornerRadius(24)
                             .padding(.horizontal, 24)
@@ -155,46 +167,81 @@ struct ScreenTimeScreen: View {
                                     }
                                 }
                                 .padding(28)
-                        .background(Color.white)
-                        .cornerRadius(20)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
+                                .background(Color.white)
+                                .cornerRadius(20)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 20)
                                         .stroke(Color.black, lineWidth: 2)
-                        )
+                                )
                             }
-                        .padding(.horizontal, 24)
-                    }
-                    
-                    Spacer()
-                            .frame(height: 100)
+                            .padding(.horizontal, 24)
+                            .padding(.bottom, 24)
+                            
+                            if !isAnalyzing {
+                                // Add to Daily Total Button
+                                Button(action: {
+                                    showAddToTotal = true
+                                }) {
+                                    Text("Add to Daily Total")
+                                        .font(.system(size: 17, weight: .semibold))
+                                        .foregroundColor(.white)
+                                        .frame(maxWidth: .infinity)
+                                        .frame(height: 56)
+                                        .background(Color.black)
+                                        .cornerRadius(16)
+                                }
+                                .padding(.horizontal, 24)
+                                .padding(.bottom, 24)
+                            }
+                            
+                            Spacer()
+                                .frame(height: 100)
+                        }
                     }
                 }
             }
             .navigationBarHidden(true)
-        }
-        .sheet(isPresented: $showAppBreakdown) {
-            AppCarbonBreakdownView(isPresented: $showAppBreakdown)
-        }
-        .onAppear {
-            analyzeScreenTime()
+            .sheet(isPresented: $showAppBreakdown) {
+                AppCarbonBreakdownView(isPresented: $showAppBreakdown)
+            }
+            .sheet(isPresented: $showHelp) {
+                HelpView(isPresented: $showHelp, currentScreen: "Screen Time")
+            }
+            .onAppear {
+                analyzeScreenTime()
+            }
+            .alert("Added to Daily Total", isPresented: $showAddToTotal) {
+                Button("OK") {
+                    // Add screen time CO2 to carbon manager
+                    carbonManager.addCarbonEntry(
+                        estimatedCO2,
+                        itemName: "Screen Time",
+                        icon: "iphone",
+                        iconColor: .purple,
+                        subtitle: "\(String(format: "%.1f", totalScreenTime)) hours today"
+                    )
+                }
+            } message: {
+                Text("Screen Time (\(String(format: "%.2f", estimatedCO2)) kg CO₂e) has been added to your daily carbon footprint.")
+            }
         }
     }
     
     private func analyzeScreenTime() {
         // Simulate analysis delay
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            // Mock data - in real implementation, this would use Screen Time APIs
-            totalScreenTime = Double.random(in: 4.0...8.0)
-            estimatedCO2 = totalScreenTime * 0.05 // Rough estimate: 0.05 kg CO2 per hour
-            topApps = [
-                ("Safari", Double.random(in: 1.0...2.0)),
-                ("Messages", Double.random(in: 0.5...1.5)),
-                ("Instagram", Double.random(in: 0.5...1.0)),
-                ("YouTube", Double.random(in: 0.3...0.8)),
-                ("Mail", Double.random(in: 0.2...0.5))
-            ].sorted { $0.1 > $1.1 }
-            
-            isAnalyzing = false
+            // Mock data - consistent values for testing
+            self.totalScreenTime = 5.4 // hours
+            self.estimatedCO2 = 0.27 // kg CO2 (5.4 hours * 0.05 kg/hour)
+            self.topApps = [
+                ("Safari", 1.8),
+                ("Messages", 1.2),
+                ("Instagram", 0.9),
+                ("YouTube", 0.7),
+                ("Mail", 0.5)
+            ].sorted { $0.1 > $1.1 } // Sort by usage time descending
+
+            self.isAnalyzing = false
         }
     }
 }
@@ -229,14 +276,14 @@ struct AppCarbonBreakdownView: View {
                                 Text("Today's Impact")
                                     .font(.system(size: 18, weight: .bold))
                                     .foregroundColor(.black)
-                                
+
                                 Spacer()
-                                
-                                Text("0.24 kg CO₂")
+
+                                Text("0.27 kg CO₂")
                                     .font(.system(size: 18, weight: .bold))
                                     .foregroundColor(.blue)
                             }
-                            
+
                             Text("Based on app usage patterns and server energy consumption")
                                 .font(.system(size: 14, weight: .regular))
                                 .foregroundColor(.gray)
@@ -296,7 +343,7 @@ struct AppCarbonBreakdownView: View {
                 id: UUID(),
                 name: "Safari",
                 usageHours: 1.8,
-                carbonImpact: 0.045,
+                carbonImpact: 0.090, // 1.8 hours * 0.05 kg/hour
                 category: "Web Browsing",
                 efficiency: .medium
             ),
@@ -304,7 +351,7 @@ struct AppCarbonBreakdownView: View {
                 id: UUID(),
                 name: "Instagram",
                 usageHours: 1.2,
-                carbonImpact: 0.036,
+                carbonImpact: 0.060, // 1.2 hours * 0.05 kg/hour
                 category: "Social Media",
                 efficiency: .low
             ),
@@ -312,7 +359,7 @@ struct AppCarbonBreakdownView: View {
                 id: UUID(),
                 name: "Messages",
                 usageHours: 0.9,
-                carbonImpact: 0.018,
+                carbonImpact: 0.045, // 0.9 hours * 0.05 kg/hour
                 category: "Communication",
                 efficiency: .high
             ),
@@ -320,7 +367,7 @@ struct AppCarbonBreakdownView: View {
                 id: UUID(),
                 name: "YouTube",
                 usageHours: 0.7,
-                carbonImpact: 0.042,
+                carbonImpact: 0.035, // 0.7 hours * 0.05 kg/hour
                 category: "Video Streaming",
                 efficiency: .low
             ),
@@ -328,33 +375,17 @@ struct AppCarbonBreakdownView: View {
                 id: UUID(),
                 name: "Mail",
                 usageHours: 0.5,
-                carbonImpact: 0.015,
+                carbonImpact: 0.025, // 0.5 hours * 0.05 kg/hour
                 category: "Communication",
                 efficiency: .high
             ),
             AppCarbonData(
                 id: UUID(),
-                name: "Spotify",
-                usageHours: 0.4,
-                carbonImpact: 0.012,
-                category: "Music Streaming",
-                efficiency: .medium
-            ),
-            AppCarbonData(
-                id: UUID(),
-                name: "Maps",
+                name: "Other Apps",
                 usageHours: 0.3,
-                carbonImpact: 0.009,
-                category: "Navigation",
-                efficiency: .high
-            ),
-            AppCarbonData(
-                id: UUID(),
-                name: "Photos",
-                usageHours: 0.2,
-                carbonImpact: 0.006,
-                category: "Media",
-                efficiency: .high
+                carbonImpact: 0.015, // 0.3 hours * 0.05 kg/hour
+                category: "Various",
+                efficiency: .medium
             )
         ].sorted { $0.carbonImpact > $1.carbonImpact }
     }
@@ -424,4 +455,3 @@ struct AppCarbonRow: View {
         )
     }
 }
-

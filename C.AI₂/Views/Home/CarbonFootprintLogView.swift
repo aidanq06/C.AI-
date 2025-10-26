@@ -9,8 +9,12 @@ import SwiftUI
 
 struct CarbonFootprintLogView: View {
     @Binding var isPresented: Bool
-    @State private var carbonEntries: [CarbonEntry] = []
+    @StateObject private var carbonManager = CarbonFootprintManager.shared
     @State private var showAIReductionTips = false
+
+    // Calculate totals from manager data
+    private var totalEntries: Int { carbonManager.carbonEntries.count }
+    private var totalCO2FromEntries: Double { carbonManager.carbonEntries.reduce(0) { $0 + $1.co2Amount } }
     
     var body: some View {
         NavigationView {
@@ -26,31 +30,31 @@ struct CarbonFootprintLogView: View {
                                 Image(systemName: "leaf.fill")
                                     .font(.system(size: 28))
                                     .foregroundColor(.green)
-                            
+
                             Spacer()
-                            
-                                Text("Oct 24")
+
+                                Text("Today")
                                     .font(.system(size: 15, weight: .medium))
                                     .foregroundColor(.gray)
                             }
-                            
+
                             HStack {
                                 VStack(alignment: .leading, spacing: 8) {
                                     Text("Total Carbon Footprint")
                                         .font(.system(size: 17, weight: .regular))
                                         .foregroundColor(.gray)
-                                    
+
                                     HStack(alignment: .firstTextBaseline, spacing: 6) {
-                                        Text("2.4")
+                                        Text(String(format: "%.2f", carbonManager.dailyCO2))
                                             .font(.system(size: 48, weight: .bold))
                                             .foregroundColor(.white)
-                                        
+
                                         Text("kg CO₂e")
                                             .font(.system(size: 18, weight: .semibold))
                                             .foregroundColor(.gray)
                                     }
                                 }
-                                
+
                                 Spacer()
                             }
                         }
@@ -114,8 +118,27 @@ struct CarbonFootprintLogView: View {
                         .padding(.bottom, 20)
                         
                             LazyVStack(spacing: 12) {
-                                ForEach(carbonEntries) { entry in
+                                ForEach(carbonManager.carbonEntries) { entry in
                                     CarbonEntryRow(entry: entry)
+                                }
+
+                                // Show message if no entries
+                                if carbonManager.carbonEntries.isEmpty {
+                                    VStack(spacing: 16) {
+                                        Image(systemName: "leaf.circle")
+                                            .font(.system(size: 48))
+                                            .foregroundColor(.green.opacity(0.5))
+
+                                        Text("No carbon footprint data yet")
+                                            .font(.system(size: 18, weight: .medium))
+                                            .foregroundColor(.gray)
+
+                                        Text("Start by scanning items, logging trips, or analyzing your screen time")
+                                            .font(.system(size: 14, weight: .regular))
+                                            .foregroundColor(.gray)
+                                            .multilineTextAlignment(.center)
+                                    }
+                                    .padding(.vertical, 40)
                                 }
                             }
                             .padding(.horizontal, 24)
@@ -137,51 +160,8 @@ struct CarbonFootprintLogView: View {
         .sheet(isPresented: $showAIReductionTips) {
             AIReductionTipsView(isPresented: $showAIReductionTips)
         }
-        .onAppear {
-            loadCarbonEntries()
-        }
     }
     
-    private func loadCarbonEntries() {
-        carbonEntries = [
-            CarbonEntry(
-                id: UUID(),
-                title: "Beef Steak",
-                subtitle: "Dinner • 8:30 PM",
-                co2Amount: 2.4,
-                icon: "fork.knife",
-                iconColor: .red,
-                timeAgo: "2 hours ago"
-            ),
-            CarbonEntry(
-                id: UUID(),
-                title: "Driving to Work",
-                subtitle: "Commute • 8:15 AM",
-                co2Amount: 1.2,
-                icon: "car.fill",
-                iconColor: .blue,
-                timeAgo: "14 hours ago"
-            ),
-            CarbonEntry(
-                id: UUID(),
-                title: "Coffee",
-                subtitle: "Morning • 7:45 AM",
-                co2Amount: 0.2,
-                icon: "cup.and.saucer.fill",
-                iconColor: .brown,
-                timeAgo: "15 hours ago"
-            ),
-            CarbonEntry(
-                id: UUID(),
-                title: "Screen Time",
-                subtitle: "Digital Usage • All Day",
-                co2Amount: 0.1,
-                icon: "iphone",
-                iconColor: .purple,
-                timeAgo: "Ongoing"
-            )
-        ]
-    }
 }
 
 struct CarbonEntryRow: View {
