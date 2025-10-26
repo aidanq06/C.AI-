@@ -18,13 +18,24 @@ The goal is simple: show people their environmental impact in real numbers, then
 
 ## How it works
 
-**Scan items** - Take a photo of food or products. The app uses AI to identify what it is and calculates the carbon impact. Something like a steak might show 2.4 kg of CO₂
+### Scan items - Take a photo of food or products. The app uses AI to identify what it is and calculates the carbon impact. Something like a steak might show 2.4 kg of CO₂
 
 <img width="200" height="500" alt="IMG_2578" src="https://github.com/user-attachments/assets/e8aa691d-d66d-4e1a-9e59-8768adb42576" />
+<img width="300" height="500" alt="image" src="https://github.com/user-attachments/assets/11cc9830-a11d-48d9-a487-c0a703353017" />
 
-**Track driving** - The app automatically detects when you're in a car and logs your trips. It knows how far you went and calculates emissions based on distance and speed.
 
-**Monitor screen time** - Every hour you spend on your phone creates emissions from data centers and servers. The app tracks this and shows which apps use the most energy.
+### Track driving - The app automatically detects when you're in a car and logs your trips. It knows how far you went and calculates emissions based on distance and speed.
+
+<img width="200" height="500" alt="IMG_2588" src="https://github.com/user-attachments/assets/d6dca538-daed-4504-b84b-f50091a4a113" />
+<img width="200" height="500" alt="IMG_2587" src="https://github.com/user-attachments/assets/52c04e1f-e00b-4f15-8c60-8d7176587e6e" />
+
+### Monitor screen time - Every hour you spend on your phone creates emissions from data centers and servers. The app tracks this and shows which apps use the most energy.
+
+<img width="200" height="500" alt="IMG_2589" src="https://github.com/user-attachments/assets/2ab19591-1ea5-4759-878e-aab50058a805" />
+<img width="200" height="500" alt="IMG_2590" src="https://github.com/user-attachments/assets/51b0f7d9-688d-4dc2-b348-7cdf514a87a0" />
+<img width="200" height="500" alt="IMG_2591" src="https://github.com/user-attachments/assets/6477087f-7231-4738-8acf-e051ad25fa4f" />
+
+
 
 **Get personalized tips** - Based on your actual usage, the app suggests concrete ways to reduce your footprint. Want to cut 2 kg of CO₂ today? Here's how.
 
