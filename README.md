@@ -11,9 +11,9 @@ carbon.ai₂ is an iOS app that tracks your carbon footprint automatically. Just
 
 The goal is simple: show people their environmental impact in real numbers, then help them make better choices.
 
-<img width="200" height="500" alt="IMG_2584" src="https://github.com/user-attachments/assets/43828c14-ac37-4ea1-8daf-701eff8327dc" />
-<img width="200" height="500" alt="IMG_2583" src="https://github.com/user-attachments/assets/61b99de4-8f55-45b0-a80d-5c6095eb4ba1" />
 <img width="200" height="500" alt="IMG_2582" src="https://github.com/user-attachments/assets/b2980811-ccda-4488-a9ac-8dc30cfb5a3d" />
+<img width="200" height="500" alt="IMG_2583" src="https://github.com/user-attachments/assets/61b99de4-8f55-45b0-a80d-5c6095eb4ba1" />
+<img width="200" height="500" alt="IMG_2584" src="https://github.com/user-attachments/assets/43828c14-ac37-4ea1-8daf-701eff8327dc" />
 <img width="200" height="500" alt="IMG_2585" src="https://github.com/user-attachments/assets/7166d0b9-932e-444d-8e3e-92e1af473f7c" />
 
 ## How it works
