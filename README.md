@@ -1,111 +1,53 @@
-# C.AI₂ - Carbon Footprint Tracking App
+# carbon.ai₂
 
-Demonstration Video: https://www.youtube.com/watch?v=RE9tpsIcT-4
+Watch the app in action: https://www.youtube.com/watch?v=RE9tpsIcT-4
 
-## Overview
+## What is this?
 
-carbon.ai₂ is an iOS application that leverages computer vision and machine learning to automatically track and analyze individual carbon footprints. The app uses Google's Vision API for image recognition and Google's Gemini AI to estimate carbon emissions, providing users with actionable insights to reduce their environmental impact.
+carbon.ai₂ is an iOS app that tracks your carbon footprint automatically. Just point your camera at food items, drive around, or use your phone, and the app calculates how much carbon dioxide you're generating.
 
-## Architecture
+The goal is simple: show people their environmental impact in real numbers, then help them make better choices.
 
-The application follows a clean, modular architecture with separation of concerns:
+## How it works
 
-### Core Components
+**Scan items** - Take a photo of food or products. The app uses AI to identify what it is and calculates the carbon impact. A steak might show 2.4 kg of CO₂, while a salad might show 0.3 kg.
 
-**Managers/**
-- `CarbonFootprintManager.swift`: Central state management for carbon tracking using ObservableObject pattern with published properties for reactive UI updates
-- `CameraManager.swift`: Handles AVFoundation camera session management and photo capture with crop functionality
-- `VisionAPIManager.swift`: Interfaces with Google Cloud Vision API for object identification from captured images
-- `GeminiManager.swift`: Utilizes Google Gemini AI for carbon footprint estimation based on identified objects
-- `LocationManager.swift`: CoreLocation integration for GPS-based driving detection and trip tracking
+**Track driving** - The app automatically detects when you're in a car and logs your trips. It knows how far you went and calculates emissions based on distance and speed.
 
-**Models/**
-- `CarbonModels.swift`: Data structures for CarbonEntry, DetectedTrip, AppCarbonData, and related enums
+**Monitor screen time** - Every hour you spend on your phone creates emissions from data centers and servers. The app tracks this and shows which apps use the most energy.
 
-**Views/**
-- Home: Primary dashboard with total CO₂ display and activity log
-- Camera: Image capture and analysis workflow
-- Driving: Automatic trip detection and logging
-- ScreenTime: Digital carbon footprint tracking
-- Settings: User preferences and app configuration
+**Get personalized tips** - Based on your actual usage, the app suggests concrete ways to reduce your footprint. Want to cut 2 kg of CO₂ today? Here's how.
 
-## Technical Implementation
+## Technical approach
 
-### Image Processing Pipeline
+The app uses Google's Vision API to identify objects in photos, then Google's Gemini AI to estimate carbon footprints. For driving, it uses location services to detect trips. For digital usage, it analyzes screen time patterns.
 
-The app implements a two-stage analysis pipeline for scanned items:
-
-1. Vision API Integration: Extracts object labels and descriptions from captured images
-2. Gemini AI Processing: Generates carbon footprint estimates with contextual explanations
-
-This dual-model approach ensures both accuracy in identification and contextual understanding of environmental impact.
-
-### Data Persistence
-
-UserDefaults stores daily carbon footprint totals and individual entries. The CarbonEntry struct implements Codable with custom encoding for SwiftUI Color properties, converting colors to hex strings for persistence and restoring them on load.
-
-### Location Tracking
-
-The LocationManager implements region monitoring to detect significant movements indicating driving trips. Speed and distance calculations trigger automatic trip logging when velocity exceeds thresholds.
+All data stays on the device and in local storage. The app works by capturing daily activity and presenting it in a clear, actionable format.
 
 ## Features
 
-- Real-time carbon footprint tracking across three categories: scanned items, driving trips, and digital usage
-- AI-powered item identification using computer vision
-- Automatic driving detection with trip logging
-- Screen time carbon impact analysis
-- Personalized reduction suggestions based on usage patterns
-- Data visualization with progress indicators and categorical breakdowns
-
-## API Integration
-
-The application requires API keys for:
-- Google Cloud Vision API: Image object detection
-- Google Gemini API: Carbon footprint estimation
-
-Keys should be added to `C.AI₂/Config/APIKeys.swift` following the template structure.
+- Take photos of items to see their carbon impact
+- Automatic driving detection and trip logging  
+- Screen time tracking and digital footprint analysis
+- AI-generated suggestions tailored to your habits
+- Clean visual dashboard showing daily totals and trends
 
 ## Requirements
 
-- iOS 14.0+
-- Xcode 14.0+
-- Active internet connection for API calls
-- Camera permission for item scanning
-- Location permission for driving detection
+iPhone running iOS 14 or newer. The app needs camera access for scanning items and location access for tracking trips.
 
-## Demonstration
+## Project structure
 
-For a complete walkthrough of the application features and implementation details, view the demonstration video at:
+The codebase is organized into:
+- Managers: Core functionality for camera, carbon tracking, AI integration
+- Views: User interface screens for home, scanning, driving, screen time
+- Models: Data structures representing carbon entries, trips, and usage data
 
-https://www.youtube.com/watch?v=RE9tpsIcT-4
+See the demonstration video for a complete walkthrough: https://www.youtube.com/watch?v=RE9tpsIcT-4
 
-## Project Structure
+## Setup
 
-```
-C.AI₂/
-├── Config/
-│   ├── APIKeys.swift
-│   └── APIKeys.swift.template
-├── Managers/
-│   ├── CameraManager.swift
-│   ├── CarbonFootprintManager.swift
-│   ├── GeminiManager.swift
-│   ├── LocationManager.swift
-│   └── VisionAPIManager.swift
-├── Models/
-│   └── CarbonModels.swift
-├── Views/
-│   ├── Camera/
-│   ├── Driving/
-│   ├── Home/
-│   ├── Onboarding/
-│   ├── ScreenTime/
-│   ├── Settings/
-│   └── Shared/
-└── Assets.xcassets/
-```
+This project uses Xcode. API keys for Google Vision and Gemini are required and should be added to the Config folder. See the APIKeys.swift.template file for guidance.
 
-## License
-
-Copyright 2024 Aidan Quach. All rights reserved.
+Copyright 2024 Aidan Quach
 
