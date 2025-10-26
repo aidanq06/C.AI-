@@ -18,6 +18,10 @@ The goal is simple: show people their environmental impact in real numbers, then
 
 ## How it works
 
+### Home Screen - Here you can see the Carbon Footprint card, displaying your total carbon footprint in kilograms, and your daily usage. Your goal is to stay under 10 kilograms. There are also 2 widgets displaying your daily average and monthly goal. We can scan items to add to our carbon footprint.
+
+<img width="200" height="500" alt="Simulator Screenshot - iPhone 17 - 2025-10-26 at 17 11 48" src="https://github.com/user-attachments/assets/04b8f0cf-f332-43e2-966c-8adf13f3e64c" />
+
 ### Scan items - Take a photo of food or products. The app uses AI to identify what it is and calculates the carbon impact. Something like a steak might show 2.4 kg of CO₂
 
 <img width="200" height="500" alt="IMG_2578" src="https://github.com/user-attachments/assets/e8aa691d-d66d-4e1a-9e59-8768adb42576" />
