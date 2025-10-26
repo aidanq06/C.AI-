@@ -2,15 +2,25 @@
 
 Watch the app in action: https://www.youtube.com/watch?v=RE9tpsIcT-4
 
+<img width="300" height="300" alt="ChatGPT Image Oct 26, 2025, 04_01_28 PM" src="https://github.com/user-attachments/assets/6a2b8b25-f245-4149-8fb9-43734bbbcf05" />
+
+
 ## What is this?
 
 carbon.ai₂ is an iOS app that tracks your carbon footprint automatically. Just point your camera at food items, drive around, or use your phone, and the app calculates how much carbon dioxide you're generating.
 
 The goal is simple: show people their environmental impact in real numbers, then help them make better choices.
 
+<img width="200" height="500" alt="IMG_2584" src="https://github.com/user-attachments/assets/43828c14-ac37-4ea1-8daf-701eff8327dc" />
+<img width="200" height="500" alt="IMG_2583" src="https://github.com/user-attachments/assets/61b99de4-8f55-45b0-a80d-5c6095eb4ba1" />
+<img width="200" height="500" alt="IMG_2582" src="https://github.com/user-attachments/assets/b2980811-ccda-4488-a9ac-8dc30cfb5a3d" />
+<img width="200" height="500" alt="IMG_2585" src="https://github.com/user-attachments/assets/7166d0b9-932e-444d-8e3e-92e1af473f7c" />
+
 ## How it works
 
-**Scan items** - Take a photo of food or products. The app uses AI to identify what it is and calculates the carbon impact. A steak might show 2.4 kg of CO₂, while a salad might show 0.3 kg.
+**Scan items** - Take a photo of food or products. The app uses AI to identify what it is and calculates the carbon impact. Something like a steak might show 2.4 kg of CO₂
+
+<img width="200" height="500" alt="IMG_2578" src="https://github.com/user-attachments/assets/e8aa691d-d66d-4e1a-9e59-8768adb42576" />
 
 **Track driving** - The app automatically detects when you're in a car and logs your trips. It knows how far you went and calculates emissions based on distance and speed.
 
