@@ -16,6 +16,17 @@ class CarbonFootprintManager: ObservableObject {
     static let shared = CarbonFootprintManager()
     
     private let userDefaultsKey = "carbonFootprintData"
+    private let scanCountKey = "scanCountKey"
+    
+    // Track which item to show for demo
+    private var scanCount: Int {
+        get {
+            UserDefaults.standard.integer(forKey: scanCountKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: scanCountKey)
+        }
+    }
     
     init() {
         loadData()
@@ -81,6 +92,27 @@ class CarbonFootprintManager: ObservableObject {
         carbonEntries = []
         UserDefaults.standard.removeObject(forKey: userDefaultsKey)
         UserDefaults.standard.removeObject(forKey: "\(userDefaultsKey)_entries")
+        // Reset scan count so first scan is beef, second is cheese
+        UserDefaults.standard.removeObject(forKey: scanCountKey)
+    }
+    
+    // For demo: track scan count to cycle through items
+    func getNextScanItem() -> (name: String, co2: Double) {
+        let current = scanCount
+        scanCount += 1
+        
+        switch current {
+        case 0:
+            return ("Beef Steak", 2.4)
+        case 1:
+            return ("Cheese", 1.5)
+        default:
+            return ("Beef Steak", 2.4)
+        }
+    }
+    
+    func resetScanCount() {
+        scanCount = 0
     }
 }
 

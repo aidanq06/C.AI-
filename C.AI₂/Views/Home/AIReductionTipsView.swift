@@ -13,6 +13,7 @@ struct AIReductionTipsView: View {
     @State private var isAnalyzing = true
     @State private var showContent = false
     @State private var selectedCardId: UUID? = nil
+    @StateObject private var carbonManager = CarbonFootprintManager.shared
     
     var body: some View {
         NavigationView {
@@ -120,45 +121,49 @@ struct AIReductionTipsView: View {
     private func generateAISuggestions() {
         // Simulate AI analysis delay
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+            // DEMO MODE - HARDCODED SUGGESTIONS BASED ON CURRENT LOG
+            // These suggestions match the items in the log (beef steak, cheese, 2 drives, screen time)
+            // To restore dynamic AI suggestions, replace this with API calls to Gemini
+            
             suggestions = [
                 AIReductionSuggestion(
                     id: UUID(),
-                    title: "Optimize Your Commute",
-                    impact: "Save 1.2 kg CO₂e",
-                    description: "Your daily drive contributes 60% of your footprint. Consider the bus + 10-minute walk alternative.",
-                    reasoning: "Same travel time, 70% less emissions. The bus route runs parallel to your driving route.",
+                    title: "Switch to Plant-Based Proteins",
+                    impact: "Save 2.4 kg CO₂e per meal",
+                    description: "Replace beef with plant-based alternatives like lentils, chickpeas, or Beyond Meat.",
+                    reasoning: "Beef production generates 27kg CO₂e per kg. Plant proteins produce only 2kg CO₂e per kg - that's 93% less emissions. Your beef steak alone contributed 2.4kg today.",
                     difficulty: "Easy",
-                    timeToImplement: "5 minutes",
-                    category: "Transportation"
-                ),
-                AIReductionSuggestion(
-                    id: UUID(),
-                    title: "Smart Meal Planning",
-                    impact: "Save 0.8 kg CO₂e",
-                    description: "Replace 2 meat meals this week with plant-based alternatives.",
-                    reasoning: "Your beef consumption is 3x the average. Plant proteins have 90% lower carbon intensity.",
-                    difficulty: "Medium",
-                    timeToImplement: "2 hours",
+                    timeToImplement: "Next meal",
                     category: "Food"
                 ),
                 AIReductionSuggestion(
                     id: UUID(),
-                    title: "Batch Your Errands",
-                    impact: "Save 0.4 kg CO₂e",
-                    description: "Combine grocery shopping with other trips to reduce driving frequency.",
-                    reasoning: "You make 4 separate trips weekly. Batching reduces this to 2 trips, cutting emissions by 50%.",
+                    title: "Reduce Dairy Consumption",
+                    impact: "Save 1.5 kg CO₂e weekly",
+                    description: "Try oat milk, almond cheese, or reduce portion sizes of dairy products.",
+                    reasoning: "Cheese produces 13.5kg CO₂e per kg. Your 1.5kg contribution today could be cut in half by choosing plant-based alternatives or smaller portions.",
+                    difficulty: "Medium",
+                    timeToImplement: "1 week",
+                    category: "Food"
+                ),
+                AIReductionSuggestion(
+                    id: UUID(),
+                    title: "Carpool or Use Public Transit",
+                    impact: "Save 2.1 kg CO₂e daily",
+                    description: "Your two drives today (8.5km and 5.8km) could be combined or replaced with the RTS bus.",
+                    reasoning: "Your 14.3km of driving generated 2.1kg CO₂e. The RTS bus route covers both trips with 70% fewer emissions. Carpooling with one person cuts your impact in half.",
                     difficulty: "Easy",
-                    timeToImplement: "10 minutes",
+                    timeToImplement: "Tomorrow",
                     category: "Transportation"
                 ),
                 AIReductionSuggestion(
                     id: UUID(),
-                    title: "Digital Efficiency",
-                    impact: "Save 0.1 kg CO₂e",
-                    description: "Switch to dark mode and reduce screen brightness during evening hours.",
-                    reasoning: "Your evening screen time uses 40% more energy. Dark mode reduces OLED power consumption by 60%.",
+                    title: "Optimize Screen Time Usage",
+                    impact: "Save 0.15 kg CO₂e daily",
+                    description: "Enable dark mode, reduce brightness, and limit streaming video quality to 720p.",
+                    reasoning: "Your 5.4 hours of screen time used 0.27kg CO₂e. Dark mode on OLED screens saves 60% power, and lower video quality reduces data center energy by 50%.",
                     difficulty: "Easy",
-                    timeToImplement: "1 minute",
+                    timeToImplement: "2 minutes",
                     category: "Digital"
                 )
             ]

@@ -100,7 +100,7 @@ struct HomeScreen: View {
                                         
                                         Spacer()
                                         
-                                        Text(String(format: "%.1f / 5.0 kg", carbonManager.dailyCO2))
+                                        Text(String(format: "%.1f / 10.0 kg", carbonManager.dailyCO2))
                                             .font(.system(size: 12, weight: .medium))
                                             .foregroundColor(.gray)
                                     }
@@ -110,7 +110,7 @@ struct HomeScreen: View {
                                         // Progress Bar Background
                                         GeometryReader { geometry in
                                             let dailyUsage = carbonManager.dailyCO2
-                                            let dailyMax: Double = 5.0
+                                            let dailyMax: Double = 10.0
                                             let usagePercentage = min(dailyUsage / dailyMax, 1.0)
                                             let isOverLimit = dailyUsage > dailyMax
                                             
@@ -131,15 +131,15 @@ struct HomeScreen: View {
                                         
                                         // Status Text
                                         HStack {
-                                            Text("\(Int((carbonManager.dailyCO2 / 5.0) * 100))% of daily limit")
+                                            Text("\(Int((carbonManager.dailyCO2 / 10.0) * 100))% of daily limit")
                                                 .font(.system(size: 11, weight: .medium))
                                                 .foregroundColor(.gray)
                                             
                                             Spacer()
                                             
-                                            Text(carbonManager.dailyCO2 > 5.0 ? "Over Limit" : "Good")
+                                            Text(carbonManager.dailyCO2 > 10.0 ? "Over Limit" : "Good")
                                                 .font(.system(size: 11, weight: .semibold))
-                                                .foregroundColor(carbonManager.dailyCO2 > 5.0 ? .red : .green)
+                                                .foregroundColor(carbonManager.dailyCO2 > 10.0 ? .red : .green)
                                         }
                                     }
                                 }
@@ -166,7 +166,7 @@ struct HomeScreen: View {
                                         .font(.system(size: 15, weight: .regular))
                                         .foregroundColor(.gray)
                                     
-                                    Text("1.8")
+                                    Text("14.3")
                                         .font(.system(size: 30, weight: .bold))
                                         .foregroundColor(.green)
                                     
@@ -195,11 +195,11 @@ struct HomeScreen: View {
                                         .font(.system(size: 15, weight: .regular))
                                         .foregroundColor(.gray)
                                     
-                                    Text("75%")
+                                    Text("125")
                                         .font(.system(size: 30, weight: .bold))
                                         .foregroundColor(.green)
                                     
-                                    Text("of 50kg")
+                                    Text("of 250kg")
                                         .font(.system(size: 13, weight: .medium))
                                         .foregroundColor(.gray)
                                 }

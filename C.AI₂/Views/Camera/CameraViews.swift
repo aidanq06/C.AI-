@@ -252,9 +252,8 @@ struct CarbonAnalysisView: View {
     @State private var showAddToTotal = false
     @StateObject private var carbonManager = CarbonFootprintManager.shared
     
-    // COMMENTED OUT FOR DEMO - QUICK FIX FOR HACKATHON
-    // private let visionManager = VisionAPIManager(apiKey: APIKeys.googleVisionAPIKey)
-    // private let geminiManager = GeminiManager(apiKey: APIKeys.geminiAPIKey)
+    private let visionManager = VisionAPIManager(apiKey: APIKeys.googleVisionAPIKey)
+    private let geminiManager = GeminiManager(apiKey: APIKeys.geminiAPIKey)
     
     var body: some View {
         NavigationView {
@@ -381,22 +380,6 @@ struct CarbonAnalysisView: View {
     private func analyzeImage() {
         print("🔍 Starting image analysis...")
         
-        // QUICK DEMO FIX FOR HACKATHON - DETECT STEAK
-        // This is a simplified version that just detects steak for demo purposes
-        
-        // Simulate analysis delay
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            // For demo: If it's a steak (you can enhance this with better detection)
-            // Assume we detected a steak
-            self.itemName = "Beef Steak"
-            self.carbonFootprint = 2.4  // kg CO2 for a beef steak (typical value)
-            self.carbonExplanation = "Beef has one of the highest carbon footprints. Consider plant-based alternatives or smaller portions."
-            self.itemDescription = "A beef steak, known for high environmental impact"
-            self.isAnalyzing = false
-        }
-
-        // COMMENTED OUT API CODE - CAN BE RESTORED LATER
-        /*
         // Step 1: Use Vision API to identify the item
         visionManager.analyzeImage(image) { result in
             switch result {
@@ -437,7 +420,6 @@ struct CarbonAnalysisView: View {
                 }
             }
         }
-        */
     }
 }
 

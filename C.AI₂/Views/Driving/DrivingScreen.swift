@@ -426,23 +426,6 @@ struct TripLogView: View {
             }
             .navigationBarHidden(true)
         }
-        .overlay(
-            VStack {
-                HStack {
-                    Button("Done") {
-                        isPresented = false
-                    }
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(.red)
-
-                    Spacer()
-                }
-                .padding(.horizontal, 24)
-                .padding(.top, 20)
-
-                Spacer()
-            }
-        )
         .onAppear {
             loadDemoTrips()
         }
